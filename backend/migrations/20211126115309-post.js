@@ -9,13 +9,26 @@ module.exports = {
         autoIncrement: true,
         type: Sequelize.INTEGER,
       },
+      userId: {
+        field: 'user_id',
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'users',
+          key: 'id',
+        },
+        onDelete: 'cascade',
+        onUpdate: 'cascade',
+      },
       content: {
         allowNull: false,
-        type: Sequelize.STRING(500),
+        type: Sequelize.STRING(1000),
         validate: {
           notNull: true,
           notEmpty: true,
         },
+        onDelete: 'cascade',
+        onUpdate: 'cascade',
       },
       createdAt: {
         field: "created_at",
