@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import PostDataService from "../../services/post.service";
 import IPostData from "../../types/Post";
+import ButtonsSign from "../ButtonsSign";
 
 export default function PostList() {
   const initialPostState = {
@@ -51,15 +52,6 @@ export default function PostList() {
       });
   };
 
-  const setIdCurrentPost = ({ target }: any) => {
-    setCurrentPost(target.id);
-    setContent(target.value);
-  };
-
-  const savePost = ({ target }: any) => {
-    setContent(target.value);
-  };
-
   const updatePost = (event: any) => {
     event.preventDefault();
 
@@ -76,31 +68,45 @@ export default function PostList() {
       });
   };
 
+  const setIdCurrentPost = ({ target }: any) => {
+    setCurrentPost(target.id);
+    setContent(target.value);
+  };
+
+  const savePost = ({ target }: any) => {
+    setContent(target.value);
+  };
+
+  const cancelPost = () => {
+    setCurrentPost(null);
+  };
+
   return (
     <>
       <form onSubmit={createPost}>
-        <input type='text' />
-        <button type='submit'>Create</button>
+        <textarea />
+        <button type='submit'>Tweet</button>
       </form>
+
       <ul>
         {posts &&
           posts.data?.map((post: any) => (
             <li key={post.id}>
               {Number(currentPost) === post.id ? (
                 <form id={post.id} onSubmit={updatePost}>
-                  <textarea value={content ? content : ` ${post.content}`} onChange={savePost} />
+                  <textarea value={content || `  ${post.content.trim()}`} onChange={savePost} />
                   <button id={post.id} type='submit'>
                     Save
                   </button>
-                  <button id={post.id} onClick={deletePost}>
-                    Delete
+                  <button id={post.id} onClick={cancelPost}>
+                    Cancel
                   </button>
                 </form>
               ) : (
                 <>
                   {post.content}
                   <button id={post.id} onClick={setIdCurrentPost}>
-                    Update
+                    Edit
                   </button>
                   <button id={post.id} onClick={deletePost}>
                     Delete
@@ -110,6 +116,7 @@ export default function PostList() {
             </li>
           ))}
       </ul>
+      <ButtonsSign />
     </>
   );
 }
