@@ -1,16 +1,16 @@
 import http from "../http-common";
-import IPost from "../types/Post";
+import IPostData from "../types/Post";
 
 const getPosts = () => {
-  return http.get<Array<IPost>>("/post");
+  return http.get<Array<IPostData>>("/post");
 };
 
-const createPost = (data: IPost) => {
-  return http.post<IPost>("/post", data);
+const createPost = (data: IPostData) => {
+  return http.post<IPostData>("/post", data);
 };
 
-const updatePost = (id: any, data: IPost) => {
-  return http.patch<IPost>(`/post/${id}`, data);
+const updatePost = (id: any, data: IPostData) => {
+  return http.patch<IPostData>(`/post/${id}`, data);
 };
 
 const deletePost = (id: any) => {
