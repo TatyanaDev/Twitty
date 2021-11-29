@@ -10,6 +10,7 @@ interface Post {
 module.exports.createPost = async (req: any, res: any, next: any) => {
   try {
     const { body } = req;
+    body.userId = 1;
     const createdPost: Post = await Post.create(body);
     const { id } = createdPost;
 
