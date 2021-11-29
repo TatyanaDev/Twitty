@@ -3,6 +3,7 @@ const UserController = require("../controller/user.ts");
 
 const userRouter: any = RouterForUsers();
 
-userRouter.route("/").post(UserController.createUser);
+userRouter.route("/register").post(UserController.createUser);
+userRouter.route("/login").post(UserController.checkUser);
 
 module.exports = userRouter;
