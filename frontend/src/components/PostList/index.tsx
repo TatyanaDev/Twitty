@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import PostDataService from "../../services/post.service";
 import IPostData from "../../types/Post";
-import ButtonsSign from "../ButtonsSign";
+import style from "./styles.module.css";
 
 export default function PostList() {
   const initialPostState = {
@@ -82,41 +83,66 @@ export default function PostList() {
   };
 
   return (
-    <>
-      <form onSubmit={createPost}>
-        <textarea />
-        <button type='submit'>Tweet</button>
-      </form>
-
-      <ul>
-        {posts &&
-          posts.data?.map((post: any) => (
-            <li key={post.id}>
-              {Number(currentPost) === post.id ? (
-                <form id={post.id} onSubmit={updatePost}>
-                  <textarea value={content || `  ${post.content.trim()}`} onChange={savePost} />
-                  <button id={post.id} type='submit'>
-                    Save
-                  </button>
-                  <button id={post.id} onClick={cancelPost}>
-                    Cancel
-                  </button>
-                </form>
-              ) : (
-                <>
-                  {post.content}
-                  <button id={post.id} onClick={setIdCurrentPost}>
-                    Edit
-                  </button>
-                  <button id={post.id} onClick={deletePost}>
-                    Delete
-                  </button>
-                </>
-              )}
+    <section className={style.container}>
+      <article>
+        <nav>
+          <ul>
+            <li>
+              <Link to='/'>Home</Link>
             </li>
-          ))}
-      </ul>
-      <ButtonsSign />
-    </>
+            <li>
+              <Link to='/messages'>Messages</Link>
+            </li>
+            <li>
+              <Link to='/users'>Users</Link>
+            </li>
+            <li>
+              <Link to='/profile'>Profile</Link>
+            </li>
+            <li>
+              <Link to='/settings'>Settings</Link>
+            </li>
+          </ul>
+        </nav>
+      </article>
+      <div>
+        <article>
+          <form onSubmit={createPost}>
+            <textarea />
+            <button type='submit'>Tweet</button>
+          </form>
+        </article>
+        <article>
+          <ul>
+            {posts &&
+              posts.data?.map((post: any) => (
+                <li key={post.id}>
+                  {Number(currentPost) === post.id ? (
+                    <form id={post.id} onSubmit={updatePost}>
+                      <textarea value={content || `  ${post.content.trim()}`} onChange={savePost} />
+                      <button id={post.id} type='submit'>
+                        Save
+                      </button>
+                      <button id={post.id} onClick={cancelPost}>
+                        Cancel
+                      </button>
+                    </form>
+                  ) : (
+                    <>
+                      {post.content}
+                      <button id={post.id} onClick={setIdCurrentPost}>
+                        Edit
+                      </button>
+                      <button id={post.id} onClick={deletePost}>
+                        Delete
+                      </button>
+                    </>
+                  )}
+                </li>
+              ))}
+          </ul>
+        </article>
+      </div>
+    </section>
   );
 }
