@@ -14,7 +14,7 @@ export default function App() {
     checkOnAuth();
   }, []);
 
-  const checkOnAuth = () => localStorage.getItem("registration_token");
+  const checkOnAuth = () => localStorage.getItem("token");
 
   return (
     <section>
