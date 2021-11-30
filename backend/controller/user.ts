@@ -30,29 +30,36 @@ module.exports.createUser = async (req: any, res: any, next: any) => {
     }
 
     res.status(201).send({ token: jwt.sign({ data: body }, "secret", { expiresIn: "3d" }) });
-  } catch (err) {
+  } catch (err: any) {
+    if (err.original.constraint === "users_user_name_key") {
+      return res.status(409).send({ error: "The specified username is already taken" });
+    }
+
+    if (err.original.constraint === "users_email_key") {
+      return res.status(400).send({ error: "The specified mail is already registered" });
+    }
+
     next(err);
   }
 };
 
 module.exports.checkUser = async (req: any, res: any, next: any) => {
   try {
-    console.log(req)
-    // const { body } = req;
+    const { body } = req;
 
-    // body.password = bcrypt.hashSync(body.password, 10);
+    const checkUser: User = await User.findOne({ where: { email: body.email } });
 
-    // const createdUser: User = await User.create(body);
+    if (!checkUser) {
+      return res.status(404).send({ error: "User with this email address was not found" });
+    }
 
-    // delete body.password;
+    const match = await bcrypt.compare(body.password, checkUser.password);
 
-    // const { id } = createdUser;
+    if (match) {
+      return res.status(201).send({ token: jwt.sign({ data: body }, "secret", { expiresIn: "3d" }) });
+    }
 
-    // if (!id) {
-    //   return res.status(400).send({ error: "Error when creating a user" });
-    // }
-
-    // res.status(201).send({ token: jwt.sign({ data: body }, "secret", { expiresIn: "3d" }) });
+    res.status(401).send({ error: "Password mismatch" });
   } catch (err) {
     next(err);
   }
