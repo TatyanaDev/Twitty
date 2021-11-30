@@ -1,6 +1,10 @@
 import { useState, useEffect } from "react";
+import { Formik, Form } from "formik";
+import * as Yup from "yup";
 import { Link } from "react-router-dom";
 import PostDataService from "../../services/post.service";
+import TextAreaCreatePost from "./TextAreaCreatePost";
+import TextAreaUpdatePost from "./TextAreaUpdatePost";
 import IPostData from "../../types/Post";
 import style from "./styles.module.css";
 
@@ -16,6 +20,10 @@ export default function PostList() {
   const [currentPost, setCurrentPost] = useState<null>(null);
   const [content, setContent] = useState<string>("");
 
+  const initialValues = {
+    content: "",
+  };
+
   useEffect(() => {
     getPosts();
   }, []);
@@ -30,13 +38,14 @@ export default function PostList() {
       });
   };
 
-  const createPost = (event: any) => {
-    event.preventDefault();
-
-    PostDataService.createPost({ content: event.target[0].value })
+  const createPost = (values: any, formikBag: any) => {
+    if (!values.content) {
+      return;
+    }
+    PostDataService.createPost({ content: values.content })
       .then(({ data }: any) => {
         setPosts({ data: [data.data, ...posts?.data] });
-        event.target[0].value = "";
+        formikBag.resetForm();
       })
       .catch((err: Error) => {
         console.error(err);
@@ -74,13 +83,13 @@ export default function PostList() {
     setContent(target.value);
   };
 
-  const savePost = ({ target }: any) => {
-    setContent(target.value);
-  };
-
   const cancelPost = () => {
     setCurrentPost(null);
   };
+
+  const validationSchema = Yup.object().shape({
+    content: Yup.string(),
+  });
 
   return (
     <section className={style.container}>
@@ -107,10 +116,12 @@ export default function PostList() {
       </article>
       <div>
         <article>
-          <form onSubmit={createPost}>
-            <textarea />
-            <button type='submit'>Tweet</button>
-          </form>
+          <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={createPost}>
+            <Form>
+              <TextAreaCreatePost name='content' />
+              <button type='submit'>Tweet</button>
+            </Form>
+          </Formik>
         </article>
         <article>
           <ul>
@@ -118,15 +129,17 @@ export default function PostList() {
               posts.data?.map((post: any) => (
                 <li key={post.id}>
                   {Number(currentPost) === post.id ? (
-                    <form id={post.id} onSubmit={updatePost}>
-                      <textarea value={content || `  ${post.content.trim()}`} onChange={savePost} />
-                      <button id={post.id} type='submit'>
-                        Save
-                      </button>
-                      <button id={post.id} onClick={cancelPost}>
-                        Cancel
-                      </button>
-                    </form>
+                    <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={createPost}>
+                      <Form id={post.id} onSubmit={updatePost}>
+                        <TextAreaUpdatePost name='content' setContent={setContent} content={content} post={post} />
+                        <button id={post.id} type='submit'>
+                          Save
+                        </button>
+                        <button id={post.id} onClick={cancelPost}>
+                          Cancel
+                        </button>
+                      </Form>
+                    </Formik>
                   ) : (
                     <>
                       {post.content}
