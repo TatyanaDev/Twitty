@@ -6,12 +6,8 @@ import UserRegistrationForm from "./UserRegistrationForm";
 import UserDataService from "../../services/user.service";
 
 export default function SignUp() {
-  const [userNameUniquenessError, setUserNameUniquenessError] = useState(false);
-  const [emailUniquenessError, setEmailUniquenessError] = useState(false);
-
-  // console.log(userNameUniquenessError);
-  // console.log(emailUniquenessError);
-
+  const [userNameUniquenessError, setUserNameUniquenessError] = useState(null);
+  const [emailUniquenessError, setEmailUniquenessError] = useState(null);
   const history = useHistory();
 
   const initialValues = {
@@ -39,33 +35,32 @@ export default function SignUp() {
   });
 
   const createUser = (values: any, formikBag: any) => {
+    setUserNameUniquenessError(null);
+    setEmailUniquenessError(null);
     UserDataService.createUser({ firstName: values.firstName, lastName: values.lastName, userName: values.userName, email: values.email, password: values.password })
       .then(({ data }: any) => {
-        // console.log(data)
-
         localStorage.setItem("token", data.token);
         formikBag.resetForm();
         if (data.token) {
           history.push("/");
         }
       })
-      .catch((err: any) => {
-        if (err.response.status === 409) {
-          setUserNameUniquenessError(true);
-          return;
+      .catch(({ response }: any) => {
+        if (response.status === 409) {
+          setEmailUniquenessError(response.data.error);
         }
 
-        if (err.response.status === 400) {
-          setEmailUniquenessError(true);
-          return;
+        if (response.status === 400) {
+          setUserNameUniquenessError(response.data.error);
         }
-        return;
       });
   };
 
   return (
     <section>
       <h1>Sign Up</h1>
+      {userNameUniquenessError}
+      {emailUniquenessError}
       <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={createUser} children={UserRegistrationForm} />
     </section>
   );
