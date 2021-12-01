@@ -38,8 +38,6 @@ module.exports.createUser = async (req: any, res: any, next: any) => {
     if (err.original.constraint === "users_email_key") {
       return res.status(400).send({ error: "The specified mail is already registered" });
     }
-
-    next(err);
   }
 };
 
@@ -59,7 +57,7 @@ module.exports.checkUser = async (req: any, res: any, next: any) => {
       return res.status(201).send({ token: jwt.sign({ data: body }, "secret", { expiresIn: "3d" }) });
     }
 
-    res.status(401).send({ error: "Password mismatch" });
+    res.status(401).send({ error: "Invalid password" });
   } catch (err) {
     next(err);
   }
