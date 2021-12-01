@@ -1,10 +1,13 @@
 import { useHistory } from "react-router-dom";
+import { useState } from "react";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import UserAuthorisationForm from "./UserAuthorizationForm";
 import UserDataService from "../../services/user.service";
 
 export default function SignIn() {
+  const [passwordError, setPasswordError] = useState(null);
+  const [emailError, setEmailError] = useState(null);
   const history = useHistory();
 
   const initialValues = {
@@ -18,6 +21,8 @@ export default function SignIn() {
   });
 
   const checkUser = (values: any, formikBag: any) => {
+    setPasswordError(null);
+    setEmailError(null);
     UserDataService.checkUser({ email: values.email, password: values.password })
       .then(({ data }: any) => {
         localStorage.setItem("token", data.token);
@@ -26,14 +31,22 @@ export default function SignIn() {
           history.push("/");
         }
       })
-      .catch((err: Error) => {
-        console.error(err);
+      .catch(({ response }: any) => {
+        if (response.status === 404) {
+          setPasswordError(response.data.error);
+        }
+
+        if (response.status === 401) {
+          setEmailError(response.data.error);
+        }
       });
   };
 
   return (
     <section>
       <h1>Sign In</h1>
+      {passwordError}
+      {emailError}
       <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={checkUser} children={UserAuthorisationForm} />
     </section>
   );
