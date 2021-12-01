@@ -41,7 +41,7 @@ module.exports.getPosts = async (req: any, res: any, next: any) => {
 module.exports.updatePost = async (req: any, res: any, next: any) => {
   try {
     const {
-      params: { id },
+      params: { postId: id },
       body,
     } = req;
 
@@ -60,7 +60,7 @@ module.exports.updatePost = async (req: any, res: any, next: any) => {
 module.exports.deletePost = async (req: any, res: any, next: any) => {
   try {
     const {
-      params: { id },
+      params: { postId: id },
     } = req;
 
     const rowsCount: number = await Post.destroy({ where: { id } });
