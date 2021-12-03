@@ -6,7 +6,9 @@ const userRouter = require("./user");
 const router: any = Router();
 
 router.use("/post", postRouter);
+
 router.use("/user", userRouter);
+
 router.use("/token", tokenRouter);
 
 module.exports = router;
