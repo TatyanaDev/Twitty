@@ -1,4 +1,5 @@
 export {};
+const { validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
 const { verifyRefreshToken } = require("../service/token");
 const ApiError = require("../exceptions/apiError");
@@ -32,8 +33,16 @@ module.exports.refresh = async (req: any, res: any, next: any) => {
 
 module.exports.logout = async (req: any, res: any, next: any) => {
   try {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return next(ApiError.BadRequest("Validation error", errors.array()));
+    }
+
     const { refreshToken } = req.cookies;
+
     res.clearCookie(refreshToken);
+    
     return res.status(200).json({ data: { message: "Refresh token has been removed" } });
   } catch (err) {
     next(err);
