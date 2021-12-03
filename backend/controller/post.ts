@@ -1,5 +1,5 @@
+export {};
 const { Post } = require("../models");
-
 interface Post {
   id: number;
   content: string;
