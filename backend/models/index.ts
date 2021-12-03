@@ -1,8 +1,9 @@
 "use strict";
 
-const fs = require("fs");
-const path = require("path");
 const Sequelize = require("sequelize");
+const path = require("path");
+const fs = require("fs");
+
 const basename: string = path.basename(__filename);
 
 const env: string = process.env.NODE_ENV || "development";
