@@ -1,15 +1,23 @@
-const { Post: PostForUser } = require("../models");
-
+export {};
+const { validationResult } = require("express-validator");
+const ApiError = require("../exceptions/apiError");
+const { Post } = require("../models");
 interface PostForUser {
   id: number;
-  content: string;
   userId: number;
+  content: string;
   updatedAt?: Date;
   createdAt?: Date;
 }
 
 module.exports.createPostForUser = async (req: any, res: any, next: any) => {
   try {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return next(ApiError.BadRequest("Validation error", errors.array()));
+    }
+
     const {
       params: { userId },
       body,
@@ -17,7 +25,7 @@ module.exports.createPostForUser = async (req: any, res: any, next: any) => {
 
     body.userId = userId;
 
-    const createdPost: PostForUser = await PostForUser.create(body);
+    const createdPost: PostForUser = await Post.create(body);
 
     const { id: postId } = createdPost;
 
@@ -37,13 +45,13 @@ module.exports.getUserPosts = async (req: any, res: any, next: any) => {
       params: { userId },
     } = req;
 
-    const posts: PostForUser[] = await PostForUser.findAll({ where: { userId } });
+    const posts: PostForUser[] = await Post.findAll({ where: { userId } });
 
     if (!posts.length) {
       return res.status(404).send({ error: "Posts not found" });
     }
 
-    res.status(200).send({ data: posts.slice().sort((a: Post, b: Post) => b.id - a.id) });
+    res.status(200).send({ data: posts.slice().sort((a: PostForUser, b: PostForUser) => b.id - a.id) });
   } catch (err) {
     next(err);
   }
@@ -56,14 +64,14 @@ module.exports.updateUserPost = async (req: any, res: any, next: any) => {
       body,
     } = req;
 
-    const findPost: PostForUser = await PostForUser.findOne({ where: { id } });
+    const findPost: PostForUser = await Post.findOne({ where: { id } });
 
     if (!findPost) {
       return res.status(404).send({ error: "Posts not found" });
     }
 
     if (findPost.userId === Number(userId)) {
-      const [rowsCount, [updatePost]] = await PostForUser.update(body, { where: { id }, returning: true });
+      const [rowsCount, [updatePost]] = await Post.update(body, { where: { id }, returning: true });
 
       if (rowsCount !== 1) {
         return res.status(400).send({ error: "User post has not been updated" });
@@ -84,14 +92,14 @@ module.exports.deleteUserPost = async (req: any, res: any, next: any) => {
       params: { postId: id, userId },
     } = req;
 
-    const findPost: PostForUser = await PostForUser.findOne({ where: { id } });
+    const findPost: PostForUser = await Post.findOne({ where: { id } });
 
     if (!findPost) {
       return res.status(404).send({ error: "Posts not found" });
     }
 
     if (findPost.userId === Number(userId)) {
-      const rowsCount: number = await PostForUser.destroy({ where: { id } });
+      const rowsCount: number = await Post.destroy({ where: { id } });
 
       if (!rowsCount) {
         return res.status(404).send({ error: "Post has already been deleted" });
