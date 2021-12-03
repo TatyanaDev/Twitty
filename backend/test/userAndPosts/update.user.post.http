@@ -1,4 +1,5 @@
 PATCH http://localhost:5000/api/user/1/post/58 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjo0NTUsImlhdCI6MTYzODUyOTM0OCwiZXhwIjoxNjM4NTMyOTQ4fQ.iv7Ah5sLy1KEsQL6gW9Z_noqZu_MpqOV2f27Roc9jCM
 Content-Type: application/json
 
 {
