@@ -1,0 +1,7 @@
+POST http://localhost:5000/api/token/logout HTTP/1.1
+Content-Type: application/json
+
+{
+  "email": "testроovich9830@gmail.com",
+  "password": "123ро45"
+} 
