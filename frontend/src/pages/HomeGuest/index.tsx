@@ -2,9 +2,8 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import PostDataService from "../../services/post.service";
 import IPostData from "../../types/Post";
-import style from "./styles.module.css";
 
-export default function PostListGuest() {
+export default function HomeGuest() {
   const initialPostState = {
     id: null,
     content: "",
@@ -30,7 +29,7 @@ export default function PostListGuest() {
 
   return (
     <section>
-      <div className={style.container}>
+      <div className='container'>
         <article>
           <nav>
             <ul>
@@ -41,12 +40,22 @@ export default function PostListGuest() {
           </nav>
         </article>
         <article>
-          <ul>{posts && posts.data?.map((post: any) => <li key={post.id}>{post.content}</li>)}</ul>
+          <ul>
+            {posts &&
+              posts.data?.map((post: any) => (
+                <li key={post.id}>
+                  <h1>
+                    {post.User.firstName} {post.User.lastName} @{post.User.userName} · {new Date(post.updatedAt).toLocaleString("arabext", { day: "numeric", month: "short", year: "numeric" })}
+                  </h1>
+                  <p>{post.content}</p>
+                </li>
+              ))}
+          </ul>
         </article>
       </div>
       <footer>
         <nav>
-          <ul className={style.container}>
+          <ul className='container'>
             <li>
               <Link to='/login'>Sign in</Link>
             </li>
