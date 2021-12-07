@@ -1,6 +1,7 @@
 export default interface IPostData {
-  id?: any | null,
-  content: string,
-  createdAt?: Date,
-  updatedAt?: Date,
+  id?: any | null;
+  userId?: number | null;
+  content: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
