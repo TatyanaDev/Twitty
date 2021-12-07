@@ -1,27 +1,21 @@
-import http from "../http-common";
+import { AxiosResponse } from "axios";
 import IPostData from "../types/Post";
+import http from "../http-common";
 
-const getPosts = () => {
-  return http.get<Array<IPostData>>("/post");
-};
+export default class PostService {
+  static async getPosts(): Promise<AxiosResponse<any>> {
+    return http.get<Array<IPostData>>("/post");
+  }
 
-const createPost = (data: IPostData) => {
-  return http.post<IPostData>("/post", data);
-};
+  static async createPost(userId: number, data: IPostData): Promise<AxiosResponse<any>> {
+    return http.post<IPostData>(`/user/${userId}/post`, data);
+  }
 
-const updatePost = (id: any, data: IPostData) => {
-  return http.patch<IPostData>(`/post/${id}`, data);
-};
+  static async updatePost(postId: number, userId: number, data: IPostData): Promise<AxiosResponse<any>> {
+    return http.patch<IPostData>(`/user/${userId}/post/${postId}`, data);
+  }
 
-const deletePost = (id: any) => {
-  return http.delete<any>(`/post/${id}`);
-};
-
-const PostService = {
-  getPosts,
-  createPost,
-  updatePost,
-  deletePost,
-};
-
-export default PostService;
+  static async deletePost(postId: number, userId: number): Promise<AxiosResponse<any>> {
+    return http.delete<IPostData>(`/user/${userId}/post/${postId}`);
+  }
+}
