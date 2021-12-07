@@ -1,27 +1,27 @@
 'use strict';
 
-const { Model } = require("sequelize");
+const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-  class Post extends Model {
+  class Comment extends Model {
     static associate(models) {
-      Post.hasMany(models.Comment, {
-        foreignKey: "postId",
-        onUpdate: 'cascade',
-        onDelete: 'cascade',
-      });
-      Post.belongsTo(models.User, {
+      Comment.belongsTo(models.User, {
         foreignKey: 'userId',
         onUpdate: 'cascade',
         onDelete: 'cascade',
       });
+      Comment.belongsTo(models.Post, {
+        foreignKey: 'postId',
+        onUpdate: 'cascade',
+        onDelete: 'cascade',
+      });
     }
-  }
-  Post.init(
+  };
+  Comment.init(
     {
-      content: {
+      contents: {
         allowNull: false,
-        type: DataTypes.STRING(1000),
+        type: DataTypes.STRING(500),
         validate: {
           notNull: true,
           notEmpty: true,
@@ -29,13 +29,11 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: 'cascade',
         onUpdate: 'cascade',
       },
-    },
-    {
-      sequelize,
-      modelName: "Post",
-      tableName: "posts",
-      underscored: true,
-    }
-  );
-  return Post;
+    }, {
+    sequelize,
+    modelName: 'Comment',
+    tableName: "comments",
+    underscored: true,
+  });
+  return Comment;
 };
