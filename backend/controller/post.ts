@@ -1,5 +1,6 @@
 export {};
 const { Post } = require("../models");
+const { User } = require("../models");
 interface Post {
   id: number;
   content: string;
@@ -26,7 +27,12 @@ module.exports.createPost = async (req: any, res: any, next: any) => {
 
 module.exports.getPosts = async (req: any, res: any, next: any) => {
   try {
-    const posts: Post[] = await Post.findAll();
+    const posts: Post[] = await Post.findAll({
+      include: {
+        model: User,
+        attributes: ["firstName", "lastName", "userName"],
+      },
+    });
 
     if (!posts.length) {
       return res.status(404).send({ error: "Posts not found" });
