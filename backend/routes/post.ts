@@ -1,6 +1,6 @@
 export {};
 const { Router } = require("express");
-const PostController = require("../controller/post.ts");
+const PostController = require("../controller/post");
 
 const postRouter: any = Router();
 
