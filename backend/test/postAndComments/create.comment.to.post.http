@@ -1,0 +1,7 @@
+POST http://localhost:5000/api/user/4/post/2/comment HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjo0LCJpYXQiOjE2Mzg4ODUzMTYsImV4cCI6MTYzODg4ODkxNn0.ksCHswS1j1SVc4bsXIPySrxSGhDf60TG-Bl_aOPh854
+Content-Type: application/json
+
+{
+  "contents":"dfgdfg"
+} 
