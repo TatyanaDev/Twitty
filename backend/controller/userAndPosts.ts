@@ -67,7 +67,7 @@ module.exports.updateUserPost = async (req: any, res: any, next: any) => {
     const findPost: PostForUser = await Post.findOne({ where: { id } });
 
     if (!findPost) {
-      return res.status(404).send({ error: "Posts not found" });
+      return res.status(404).send({ error: "Post not found" });
     }
 
     if (findPost.userId === Number(userId)) {
