@@ -1,10 +1,13 @@
 import { AxiosResponse } from "axios";
 import IPostData from "../types/Post";
 import http from "../http-common";
-
 export default class PostService {
   static async getPosts(): Promise<AxiosResponse<any>> {
     return http.get<Array<IPostData>>("/post");
+  }
+
+  static async getPost(postId: any): Promise<AxiosResponse<any>> {
+    return http.get<Array<IPostData>>(`/post/${postId}`);
   }
 
   static async createPost(userId: number, data: IPostData): Promise<AxiosResponse<any>> {
