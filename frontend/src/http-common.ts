@@ -31,7 +31,9 @@ api.interceptors.response.use(
 
         return api.request(originalRequest);
       } catch (err) {
-        console.log("Not authorized");
+        localStorage.removeItem("token");
+
+        window.location.replace("/");
       }
     }
     throw error;
