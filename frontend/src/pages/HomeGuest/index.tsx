@@ -1,30 +1,23 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import PostDataService from "../../services/post.service";
+import PostService from "../../services/post.service";
 import IPostData from "../../types/Post";
 
 export default function HomeGuest() {
-  const initialPostState = {
-    id: null,
-    content: "",
-    createdAt: undefined,
-    updatedAt: undefined,
-  };
-
-  const [posts, setPosts] = useState<IPostData>(initialPostState) as any;
+  const [posts, setPosts] = useState<IPostData[]>([]);
 
   useEffect(() => {
     getPosts();
   }, []);
 
-  const getPosts = () => {
-    PostDataService.getPosts()
-      .then((res: any) => {
-        setPosts(res.data);
-      })
-      .catch((err: Error) => {
-        console.error(err);
-      });
+  const getPosts = async () => {
+    try {
+      const { data } = await PostService.getPosts();
+
+      setPosts(data.data);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
@@ -41,15 +34,18 @@ export default function HomeGuest() {
         </article>
         <article>
           <ul>
-            {posts &&
-              posts.data?.map((post: any) => (
+            {posts.length ? (
+              posts.map((post: any) => (
                 <li key={post.id}>
                   <h1>
                     {post.User.firstName} {post.User.lastName} @{post.User.userName} · {new Date(post.updatedAt).toLocaleString("arabext", { day: "numeric", month: "short", year: "numeric" })}
                   </h1>
                   <p>{post.content}</p>
                 </li>
-              ))}
+              ))
+            ) : (
+              <p>No posts yet...</p>
+            )}
           </ul>
         </article>
       </div>
