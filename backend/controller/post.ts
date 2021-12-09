@@ -3,6 +3,7 @@ const { Post } = require("../models");
 const { User } = require("../models");
 interface Post {
   id: number;
+  userId: number;
   content: string;
   updatedAt?: Date;
   createdAt?: Date;
@@ -76,6 +77,30 @@ module.exports.deletePost = async (req: any, res: any, next: any) => {
     }
 
     res.status(200).send({ data: `${rowsCount} post successfully deleted` });
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports.getPost = async (req: any, res: any, next: any) => {
+  try {
+    const {
+      params: { postId: id },
+    } = req;
+
+    const findPost: Post = await Post.findOne({
+      where: { id },
+      include: {
+        model: User,
+        attributes: ["firstName", "lastName", "userName"],
+      },
+    });
+
+    if (!findPost) {
+      return res.status(404).send({ error: "Post not found" });
+    }
+
+    res.status(200).send({ data: findPost });
   } catch (err) {
     next(err);
   }

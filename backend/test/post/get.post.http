@@ -1,0 +1,2 @@
+GET http://localhost:5000/api/post/56 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjozLCJpYXQiOjE2Mzg5NjQyMTYsImV4cCI6MTYzODk2NzgxNn0.PhIzJrm0NryiMRg15v87sehTFi7oF8FDab4xRaoTVSw

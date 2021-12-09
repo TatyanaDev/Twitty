@@ -1,2 +1,2 @@
-GET http://localhost:5000/api/user/49/post/2/comment HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjo0LCJpYXQiOjE2Mzg4ODUzMTYsImV4cCI6MTYzODg4ODkxNn0.ksCHswS1j1SVc4bsXIPySrxSGhDf60TG-Bl_aOPh854
+GET http://localhost:5000/api/post/2/comment HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjozLCJpYXQiOjE2Mzg5NzYxODQsImV4cCI6MTYzODk3OTc4NH0.-lUnsKlJnqWNy0Dxcfgo8YDU5GlpKQsFxB5qG0jw5tQ

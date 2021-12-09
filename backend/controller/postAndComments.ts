@@ -3,7 +3,7 @@ const { validationResult } = require("express-validator");
 const ApiError = require("../exceptions/apiError");
 const { Comment } = require("../models");
 const { Post } = require("../models");
-
+const { User } = require("../models");
 interface CommentForPost {
   id: number;
   postId: number;
@@ -48,7 +48,13 @@ module.exports.getPostComments = async (req: any, res: any, next: any) => {
       params: { postId },
     } = req;
 
-    const comments: CommentForPost[] = await Comment.findAll({ where: { postId } });
+    const comments: CommentForPost[] = await Comment.findAll({
+      where: { postId },
+      include: {
+        model: User,
+        attributes: ["firstName", "lastName", "userName"],
+      },
+    });
 
     if (!comments.length) {
       return res.status(404).send({ error: "No comments yet..." });
@@ -79,11 +85,7 @@ module.exports.updatePostComment = async (req: any, res: any, next: any) => {
       return res.status(404).send({ error: "Post not found" });
     }
 
-    if (findComment.userId !== Number(userId) || findPost.userId !== Number(userId) || findComment.userId !== findPost.userId) {
-      return res.status(404).send({ error: "The comment does not belong to the user" });
-    }
-
-    if (findComment.userId === Number(userId) && findPost.userId === Number(userId)) {
+    if (findComment.userId === Number(userId)) {
       const [rowsCount, [updateComment]] = await Comment.update(body, { where: { id }, returning: true });
 
       if (rowsCount !== 1) {
@@ -115,10 +117,6 @@ module.exports.deletePostComment = async (req: any, res: any, next: any) => {
 
     if (!findPost) {
       return res.status(404).send({ error: "Post not found" });
-    }
-
-    if (findComment.userId !== Number(userId) || findPost.userId !== Number(userId) || findComment.userId !== findPost.userId) {
-      return res.status(404).send({ error: "The comment does not belong to the user" });
     }
 
     if (findComment.userId === Number(userId)) {
