@@ -30,8 +30,12 @@ export default function Comments({ userData, setUserData }: any) {
     updatedAt: undefined,
   };
 
-  const initialValues = {
+  const initialValuesPost = {
     content: "",
+  };
+
+  const initialValuesComment = {
+    contents: "",
   };
 
   const [comments, setComments] = useState<ICommentData[]>([initialCommentState]);
@@ -169,7 +173,11 @@ export default function Comments({ userData, setUserData }: any) {
     setCurrentPost(null);
   };
 
-  const validationSchema = Yup.object().shape({
+  const validationSchemaPost = Yup.object().shape({
+    content: Yup.string().trim(),
+  });
+
+  const validationSchemaComment = Yup.object().shape({
     content: Yup.string().trim(),
   });
 
@@ -183,7 +191,7 @@ export default function Comments({ userData, setUserData }: any) {
               <h1>
                 {userPost.User?.firstName} {userPost.User?.lastName} @{userPost.User?.userName} · {new Date(userPost.createdAt).toLocaleString("arabext", { day: "numeric", month: "short", year: "numeric" })}
               </h1>
-              <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={createComment}>
+              <Formik initialValues={initialValuesPost} validationSchema={validationSchemaPost} onSubmit={createComment}>
                 <Form id={userPost.id} onSubmit={updatePost}>
                   <TextAreaUpdatePost name='content' setContent={setContent} content={content} post={userPost} />
                   <button id={userPost.id} type='submit'>
@@ -215,7 +223,7 @@ export default function Comments({ userData, setUserData }: any) {
           )}
         </article>
         <article>
-          <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={createComment}>
+          <Formik initialValues={initialValuesComment} validationSchema={validationSchemaComment} onSubmit={createComment}>
             <Form>
               <TextAreaCreateComment name='contents' />
               <button type='submit'>Comment</button>
@@ -232,7 +240,7 @@ export default function Comments({ userData, setUserData }: any) {
                       <h1>
                         {comment.User?.firstName || userData.firstName} {comment.User?.lastName || userData.lastName} @{comment.User?.userName || userData.userName} · {new Date(comment.createdAt).toLocaleString("arabext", { day: "numeric", month: "short", year: "numeric" })}
                       </h1>
-                      <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={createComment}>
+                      <Formik initialValues={initialValuesComment} validationSchema={validationSchemaComment} onSubmit={createComment}>
                         <Form id={comment.id} onSubmit={updateComment}>
                           <TextAreaUpdateContent name='contents' setContent={setContent} content={content} comment={comment} />
                           <button id={comment.id} type='submit'>
