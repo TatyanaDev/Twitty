@@ -11,19 +11,11 @@ import UserService from "../../../services/user.service";
 import IPostData from "../../../types/Post";
 
 export default function Users({ userData, setUserData }: any) {
-  const initialPostState = {
-    id: null,
-    userId: null,
-    content: "",
-    createdAt: undefined,
-    updatedAt: undefined,
-  };
-
   const initialValues = {
     content: "",
   };
 
-  const [userPosts, setUserPosts] = useState<IPostData>(initialPostState) as any;
+  const [userPosts, setUserPosts] = useState<IPostData[]>([]);
   const [currentPost, setCurrentPost] = useState<null>(null);
   const [content, setContent] = useState<string>("");
   const history = useHistory();
@@ -54,7 +46,7 @@ export default function Users({ userData, setUserData }: any) {
     try {
       const { data } = await UserService.getUserPosts(userData.id);
 
-      setUserPosts(data);
+      setUserPosts(data.data);
     } catch (err) {
       console.error(err);
     }
@@ -68,7 +60,7 @@ export default function Users({ userData, setUserData }: any) {
     try {
       const { data } = await PostService.createPost(userData.id, { content });
 
-      setUserPosts({ data: [data.data, ...userPosts?.data] });
+      setUserPosts([data.data, ...userPosts]);
 
       formikBag.resetForm();
     } catch (err) {
@@ -79,12 +71,12 @@ export default function Users({ userData, setUserData }: any) {
   const updatePost = async (event: any) => {
     event.preventDefault();
 
-    userPosts.data.map((objPost: IPostData) => (objPost.id === Number(event.target.id) ? (objPost.content = event.target[0].value) : objPost));
+    userPosts.map((objPost: IPostData) => (objPost.id === Number(event.target.id) ? (objPost.content = event.target[0].value) : objPost));
 
     try {
       await PostService.updatePost(Number(event.target.id), userData.id, { content: event.target[0].value });
 
-      setUserPosts({ data: userPosts.data });
+      setUserPosts(userPosts);
 
       setCurrentPost(null);
 
@@ -98,7 +90,7 @@ export default function Users({ userData, setUserData }: any) {
     try {
       await PostService.deletePost(Number(target.id), userData.id);
 
-      setUserPosts({ data: userPosts.data.filter((post: any) => post.id !== Number(target.id)) });
+      setUserPosts(userPosts.filter((post: any) => post.id !== Number(target.id)));
     } catch (err) {
       console.error(err);
     }
@@ -145,8 +137,8 @@ export default function Users({ userData, setUserData }: any) {
         </article>
         <article>
           <ul>
-            {userPosts &&
-              userPosts.data?.map((post: any) => (
+            {userPosts.length ? (
+              userPosts.map((post: any) => (
                 <li key={post.id}>
                   {Number(currentPost) === post.id ? (
                     <>
@@ -184,7 +176,10 @@ export default function Users({ userData, setUserData }: any) {
                     </>
                   )}
                 </li>
-              ))}
+              ))
+            ) : (
+              <p>No posts yet...</p>
+            )}
           </ul>
         </article>
         <button onClick={logout}>Sign out</button>
