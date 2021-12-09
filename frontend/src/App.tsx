@@ -2,6 +2,7 @@ import { Switch, Route } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Messages from "./pages/Inner/Messages";
 import Settings from "./pages/Inner/Settings";
+import Comments from "./pages/Inner/Comments";
 import Profile from "./pages/Inner/Profile";
 import HomeGuest from "./pages/HomeGuest";
 import Users from "./pages/Inner/Users";
@@ -27,6 +28,7 @@ export default function App() {
         <Route exact path='/profile' render={() => <Profile userData={userData} setUserData={setUserData} />} />
         <Route exact path='/register' render={() => <SignUp setUserData={setUserData} />} />
         <Route exact path='/login' render={() => <SignIn setUserData={setUserData} />} />
+        <Route exact path='/posts/:id' render={() => <Comments userData={userData} setUserData={setUserData} />} />
         <Route exact path='/:userName' render={() => <Users userData={userData} setUserData={setUserData} />} />
       </Switch>
     </section>

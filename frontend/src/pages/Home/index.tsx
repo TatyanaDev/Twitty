@@ -1,4 +1,4 @@
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
@@ -117,7 +117,7 @@ export default function Home({ userData, setUserData }: any) {
 
   return (
     <section className='container'>
-       {userData && <NavigationMenu userData={userData} />}
+      {userData && <NavigationMenu userData={userData} />}
       <div>
         <article>
           <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={createPost}>
@@ -129,13 +129,15 @@ export default function Home({ userData, setUserData }: any) {
         </article>
         <article>
           <ul>
-            {posts &&
+            {posts ? (
               posts.data?.map((post: any) => (
                 <li key={post.id}>
                   {Number(currentPost) === post.id ? (
                     <>
                       <h1>
-                        {post.User?.firstName || userData.firstName} {post.User?.lastName || userData.lastName} @{post.User?.userName || userData.userName} · {new Date(post.createdAt).toLocaleString("arabext", { day: "numeric", month: "short", year: "numeric" })}
+                        <Link to={`/posts/${post.id}`}>
+                          {post.User?.firstName || userData.firstName} {post.User?.lastName || userData.lastName} @{post.User?.userName || userData.userName} · {new Date(post.createdAt).toLocaleString("arabext", { day: "numeric", month: "short", year: "numeric" })}
+                        </Link>
                       </h1>
                       <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={createPost}>
                         <Form id={post.id} onSubmit={updatePost}>
@@ -152,7 +154,9 @@ export default function Home({ userData, setUserData }: any) {
                   ) : (
                     <>
                       <h1>
-                        {post.User?.firstName || userData.firstName} {post.User?.lastName || userData.lastName} @{post.User?.userName || userData.userName} · {new Date(post.createdAt).toLocaleString("arabext", { day: "numeric", month: "short", year: "numeric" })}
+                        <Link to={`/posts/${post.id}`}>
+                          {post.User?.firstName || userData.firstName} {post.User?.lastName || userData.lastName} @{post.User?.userName || userData.userName} · {new Date(post.createdAt).toLocaleString("arabext", { day: "numeric", month: "short", year: "numeric" })}
+                        </Link>
                       </h1>
                       <p>{post.content}</p>
                       {post.userId === userData.id && (
@@ -168,7 +172,10 @@ export default function Home({ userData, setUserData }: any) {
                     </>
                   )}
                 </li>
-              ))}
+              ))
+            ) : (
+              <p>No posts yet...</p>
+            )}
           </ul>
         </article>
       </div>

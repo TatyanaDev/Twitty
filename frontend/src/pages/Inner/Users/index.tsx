@@ -1,4 +1,4 @@
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
@@ -151,7 +151,9 @@ export default function Users({ userData, setUserData }: any) {
                   {Number(currentPost) === post.id ? (
                     <>
                       <h1>
-                        {userData.firstName} {userData.lastName} @{userData.userName} · {new Date(post.createdAt).toLocaleString("arabext", { day: "numeric", month: "short", year: "numeric" })}
+                        <Link to={`/posts/${post.id}`}>
+                          {userData.firstName} {userData.lastName} @{userData.userName} · {new Date(post.createdAt).toLocaleString("arabext", { day: "numeric", month: "short", year: "numeric" })}
+                        </Link>
                       </h1>
                       <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={createPost}>
                         <Form id={post.id} onSubmit={updatePost}>
@@ -168,7 +170,9 @@ export default function Users({ userData, setUserData }: any) {
                   ) : (
                     <>
                       <h1>
-                        {userData.firstName} {userData.lastName} @{userData.userName} · {new Date(post.createdAt).toLocaleString("arabext", { day: "numeric", month: "short", year: "numeric" })}
+                        <Link to={`/posts/${post.id}`}>
+                          {userData.firstName} {userData.lastName} @{userData.userName} · {new Date(post.createdAt).toLocaleString("arabext", { day: "numeric", month: "short", year: "numeric" })}
+                        </Link>
                       </h1>
                       <p>{post.content}</p>
                       <button id={post.id} onClick={setIdCurrentPost}>
