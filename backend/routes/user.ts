@@ -1,9 +1,9 @@
 export {};
 const { body } = require("express-validator");
 const { Router } = require("express");
-const PostAndCommentsController = require("../controller/postAndComments")
+const PostAndCommentsController = require("../controller/postAndComments");
 const UserAndPostsController = require("../controller/userAndPosts");
-const authMiddleware = require("../middlewares/auth")
+const authMiddleware = require("../middlewares/auth");
 const UserController = require("../controller/user");
 
 const userRouter: any = Router();
@@ -39,8 +39,6 @@ userRouter.route("/:userId/post/:postId")
            UserAndPostsController.deleteUserPost);
 
 userRouter.route("/:userId/post/:postId/comment")
-          .get(authMiddleware,
-           PostAndCommentsController.getPostComments)
           .post(authMiddleware,
            body("contents").isString().notEmpty(), 
            PostAndCommentsController.createCommentForPost)

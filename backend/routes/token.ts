@@ -2,7 +2,7 @@ export {};
 const { body } = require("express-validator");
 const { Router } = require("express");
 const TokenController = require("../controller/token");
-const authMiddleware = require("../middlewares/auth")
+const authMiddleware = require("../middlewares/auth");
 
 const tokenRouter: any = Router();
 
