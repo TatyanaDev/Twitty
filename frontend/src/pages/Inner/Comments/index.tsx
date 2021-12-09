@@ -21,15 +21,6 @@ export default function Comments({ userData, setUserData }: any) {
     updatedAt: undefined,
   };
 
-  const initialCommentState = {
-    id: null,
-    userId: null,
-    postId: null,
-    contents: "",
-    createdAt: undefined,
-    updatedAt: undefined,
-  };
-
   const initialValuesPost = {
     content: "",
   };
@@ -38,8 +29,8 @@ export default function Comments({ userData, setUserData }: any) {
     contents: "",
   };
 
-  const [comments, setComments] = useState<ICommentData[]>([initialCommentState]);
   const [userPost, setUserPost] = useState<IPostData[]>([initialPostState]) as any;
+  const [comments, setComments] = useState<ICommentData[]>([]);
   const [currentPost, setCurrentPost] = useState<null>(null);
   const [content, setContent] = useState<string>("");
   const params = useParams<any>();
