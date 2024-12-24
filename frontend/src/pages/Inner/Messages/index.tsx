@@ -1,21 +1,26 @@
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { useEffect } from "react";
 import NavigationMenu from "../../../components/NavigationMenu";
-import UserService from "../../../services/user.service";
+import { getUserDataSelector } from "../../../store/selectors";
+import { get_user_data } from "../../../store/actions/user";
+import ACTION_TYPES from "../../../store/types";
 
-export default function Messages({ userData, setUserData }: any) {
+export default function Messages() {
+  const userData = useSelector(getUserDataSelector).userData;
+  const dispatch = useDispatch();
   const history = useHistory();
 
   useEffect(() => {
     getUserData();
   }, []);
 
-  const getUserData = async () => {
+  const getUserData = () => {
     try {
-      const { data } = await UserService.getUserData();
-
-      setUserData(data.data);
+      dispatch(get_user_data());
     } catch (err) {
+      dispatch({ type: ACTION_TYPES.GET_USER_DATA_ERROR });
+
       localStorage.removeItem("token");
 
       history.push("/");
@@ -24,7 +29,7 @@ export default function Messages({ userData, setUserData }: any) {
 
   return (
     <section className='container'>
-      {userData && <NavigationMenu userData={userData} />}
+      {userData && <NavigationMenu />}
       <p>Messages</p>
     </section>
   );

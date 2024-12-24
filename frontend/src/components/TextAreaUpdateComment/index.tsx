@@ -1,6 +1,6 @@
 import { useField } from "formik";
 
-export default function TextAreaUpdateContent({ setContent, content, comment, ...props }: any) {
+export default function TextAreaUpdateComment({ setContent, content, comment, ...props }: any) {
   const [field] = useField(props);
 
   const saveComment = ({ target }: any) => {

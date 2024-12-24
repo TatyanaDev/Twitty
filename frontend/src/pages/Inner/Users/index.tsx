@@ -1,16 +1,21 @@
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import TextAreaCreatePost from "../../../components/TextAreaCreatePost";
 import TextAreaUpdatePost from "../../../components/TextAreaUpdatePost";
+import { get_user_data, logout_user } from "../../../store/actions/user";
 import NavigationMenu from "../../../components/NavigationMenu";
-import AuthService from "../../../services/auth.service";
+import { getUserDataSelector } from "../../../store/selectors";
 import PostService from "../../../services/post.service";
 import UserService from "../../../services/user.service";
+import ACTION_TYPES from "../../../store/types";
 import IPostData from "../../../types/Post";
 
-export default function Users({ userData, setUserData }: any) {
+export default function Users() {
+  const userData = useSelector(getUserDataSelector).userData;
+
   const initialValues = {
     content: "",
   };
@@ -18,6 +23,7 @@ export default function Users({ userData, setUserData }: any) {
   const [userPosts, setUserPosts] = useState<IPostData[]>([]);
   const [currentPost, setCurrentPost] = useState<null>(null);
   const [content, setContent] = useState<string>("");
+  const dispatch = useDispatch();
   const history = useHistory();
 
   useEffect(() => {
@@ -30,12 +36,12 @@ export default function Users({ userData, setUserData }: any) {
     }
   }, [userData]);
 
-  const getUserData = async () => {
+  const getUserData = () => {
     try {
-      const { data } = await UserService.getUserData();
-
-      setUserData(data.data);
+      dispatch(get_user_data());
     } catch (err) {
+      dispatch({ type: ACTION_TYPES.GET_USER_DATA_ERROR });
+
       localStorage.removeItem("token");
 
       history.push("/");
@@ -109,15 +115,11 @@ export default function Users({ userData, setUserData }: any) {
     setCurrentPost(null);
   };
 
-  const logout = async () => {
+  const logoutUser = () => {
     try {
-      await AuthService.logout({ email: userData.email });
-
-      localStorage.removeItem("token");
+      dispatch(logout_user(userData));
 
       history.push("/");
-
-      setUserData(null);
     } catch (err) {
       console.error(err);
     }
@@ -125,7 +127,7 @@ export default function Users({ userData, setUserData }: any) {
 
   return (
     <section className='container'>
-      {userData && <NavigationMenu userData={userData} />}
+      {userData && <NavigationMenu />}
       <div>
         <article>
           <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={createPost}>
@@ -182,7 +184,7 @@ export default function Users({ userData, setUserData }: any) {
             )}
           </ul>
         </article>
-        <button onClick={logout}>Sign out</button>
+        <button onClick={logoutUser}>Sign out</button>
       </div>
     </section>
   );

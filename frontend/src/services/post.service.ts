@@ -6,7 +6,7 @@ export default class PostService {
     return http.get<Array<IPostData>>("/post");
   }
 
-  static async getPost(postId: any): Promise<AxiosResponse<any>> {
+  static async getPost(postId: number): Promise<AxiosResponse<any>> {
     return http.get<Array<IPostData>>(`/post/${postId}`);
   }
 

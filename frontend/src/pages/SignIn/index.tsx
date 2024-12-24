@@ -1,14 +1,16 @@
 import { useHistory } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { useState } from "react";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import UserAuthorisationForm from "../../components/UserAuthorizationForm";
+import { get_user_data } from "../../store/actions/user";
 import AuthService from "../../services/auth.service";
-import UserService from "../../services/user.service";
 
-export default function SignIn({ setUserData }: any) {
+export default function SignIn() {
   const [passwordError, setPasswordError] = useState(null);
   const [emailError, setEmailError] = useState(null);
+  const dispatch = useDispatch();
   const history = useHistory();
 
   const initialValues = {
@@ -29,13 +31,11 @@ export default function SignIn({ setUserData }: any) {
 
       localStorage.setItem("token", data.data.accessToken);
 
-      const { data: userInfo } = await UserService.getUserData();
+      dispatch(get_user_data());
 
       formikBag.resetForm();
 
-      setUserData(userInfo.data);
-
-      if (data.data.accessToken && userInfo.data) {
+      if (data.data.accessToken) {
         history.push("/");
       }
     } catch (err: any) {

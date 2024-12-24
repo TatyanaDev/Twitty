@@ -1,14 +1,16 @@
 import { useHistory } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { useState } from "react";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import UserRegistrationForm from "../../components/UserRegistrationForm";
 import AuthDataService from "../../services/auth.service";
-import UserService from "../../services/user.service";
+import { get_user_data } from "../../store/actions/user";
 
-export default function SignUp({ setUserData }: any) {
+export default function SignUp() {
   const [userNameUniquenessError, setUserNameUniquenessError] = useState(null);
   const [emailUniquenessError, setEmailUniquenessError] = useState(null);
+  const dispatch = useDispatch();
   const history = useHistory();
 
   const initialValues = {
@@ -46,13 +48,11 @@ export default function SignUp({ setUserData }: any) {
 
       localStorage.setItem("token", data.data.accessToken);
 
-      const { data: userInfo } = await UserService.getUserData();
+      dispatch(get_user_data());
 
       formikBag.resetForm();
 
-      setUserData(userInfo.data);
-
-      if (data.data.accessToken && userInfo.data) {
+      if (data.data.accessToken) {
         history.push("/");
       }
     } catch (err: any) {

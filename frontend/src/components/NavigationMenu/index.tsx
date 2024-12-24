@@ -1,6 +1,10 @@
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { getUserDataSelector } from "../../store/selectors";
 
-export default function NavigationMenu({ userData }: any) {
+export default function NavigationMenu() {
+  const userData = useSelector(getUserDataSelector).userData;
+
   return (
     <>
       {userData && (

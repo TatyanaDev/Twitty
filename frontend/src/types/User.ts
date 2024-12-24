@@ -1,5 +1,5 @@
 export default interface IUserData {
-  id?: string | number;
+  id?: number;
   firstName?: string;
   lastName?: string;
   userName?: string;

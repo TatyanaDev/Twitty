@@ -1,22 +1,23 @@
-import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import PostService from "../../services/post.service";
-import IPostData from "../../types/Post";
+import { useEffect } from "react";
+import { getPostsSelector } from "../../store/selectors";
+import { get_posts } from "../../store/actions/post";
+import ACTION_TYPES from "../../store/types";
 
 export default function HomeGuest() {
-  const [posts, setPosts] = useState<IPostData[]>([]);
+  const posts = useSelector(getPostsSelector).posts;
+  const dispatch = useDispatch();
 
   useEffect(() => {
     getPosts();
   }, []);
 
-  const getPosts = async () => {
+  const getPosts = () => {
     try {
-      const { data } = await PostService.getPosts();
-
-      setPosts(data.data);
+      dispatch(get_posts());
     } catch (err) {
-      console.error(err);
+      dispatch({ type: ACTION_TYPES.GET_POSTS_ERROR });
     }
   };
 

@@ -1,18 +1,24 @@
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
-import { useState, useEffect } from "react";
 import { Formik, Form } from "formik";
+import { useEffect } from "react";
 import * as Yup from "yup";
+import { getUserDataSelector, getPostsSelector, setCurrentPostSelector } from "../../store/selectors";
+import { get_posts, create_post, update_post, delete_post } from "../../store/actions/post";
+import { set_current_post, remove_current_post } from "../../store/actions/currentPost";
+import { set_content, clear_content } from "../../store/actions/content";
 import TextAreaCreatePost from "../../components/TextAreaCreatePost";
 import TextAreaUpdatePost from "../../components/TextAreaUpdatePost";
 import NavigationMenu from "../../components/NavigationMenu";
-import PostService from "../../services/post.service";
-import UserService from "../../services/user.service";
+import { get_user_data } from "../../store/actions/user";
+import ACTION_TYPES from "../../store/types";
 import IPostData from "../../types/Post";
 
-export default function Home({ userData, setUserData }: any) {
-  const [posts, setPosts] = useState<IPostData[]>([]);
-  const [currentPost, setCurrentPost] = useState<null>(null);
-  const [content, setContent] = useState<string>("");
+export default function Home() {
+  const currentPost = useSelector(setCurrentPostSelector).currentPost;
+  const userData = useSelector(getUserDataSelector).userData;
+  const posts = useSelector(getPostsSelector).posts;
+  const dispatch = useDispatch();
   const history = useHistory();
 
   const initialValues = {
@@ -29,25 +35,23 @@ export default function Home({ userData, setUserData }: any) {
     }
   }, [userData]);
 
-  const getUserData = async () => {
+  const getUserData = () => {
     try {
-      const { data } = await UserService.getUserData();
-
-      setUserData(data.data);
+      dispatch(get_user_data());
     } catch (err) {
+      dispatch({ type: ACTION_TYPES.GET_USER_DATA_ERROR });
+
       localStorage.removeItem("token");
 
       history.push("/");
     }
   };
 
-  const getPosts = async () => {
+  const getPosts = () => {
     try {
-      const { data } = await PostService.getPosts();
-
-      setPosts(data.data);
+      dispatch(get_posts());
     } catch (err) {
-      console.error(err);
+      dispatch({ type: ACTION_TYPES.GET_POSTS_ERROR });
     }
   };
 
@@ -57,13 +61,11 @@ export default function Home({ userData, setUserData }: any) {
     }
 
     try {
-      const { data } = await PostService.createPost(userData.id, { content });
-
-      setPosts([data.data, ...posts]);
+      dispatch(create_post(userData, content, posts));
 
       formikBag.resetForm();
     } catch (err) {
-      console.error(err);
+      dispatch({ type: ACTION_TYPES.CREATE_POST_ERROR });
     }
   };
 
@@ -73,35 +75,34 @@ export default function Home({ userData, setUserData }: any) {
     posts.map((objPost: IPostData) => (objPost.id === Number(event.target.id) ? (objPost.content = event.target[0].value) : objPost));
 
     try {
-      await PostService.updatePost(Number(event.target.id), userData.id, { content: event.target[0].value });
+      dispatch(update_post(event.target, userData, posts));
 
-      setPosts(posts);
+      dispatch(remove_current_post());
 
-      setCurrentPost(null);
-
-      setContent("");
+      dispatch(clear_content());
     } catch (err) {
-      console.error(err);
+      dispatch({ type: ACTION_TYPES.UPDATE_POST_ERROR });
     }
   };
 
   const deletePost = async ({ target }: any) => {
     try {
-      await PostService.deletePost(Number(target.id), userData.id);
-
-      setPosts(posts.filter((post: any) => post.id !== Number(target.id)));
+      dispatch(delete_post(target.id, userData, posts));
     } catch (err) {
-      console.error(err);
+      dispatch({ type: ACTION_TYPES.DELETE_POST_ERROR });
     }
   };
 
-  const setIdCurrentPost = ({ target }: any) => {
-    setCurrentPost(target.id);
-    setContent(target.value);
+  const setCurrentPost = ({ target }: any) => {
+    dispatch(set_current_post(target.id));
+
+    dispatch(set_content(target.value));
   };
 
-  const cancelPost = () => {
-    setCurrentPost(null);
+  const cancelPost = (event: any) => {
+    event.preventDefault();
+
+    dispatch(remove_current_post());
   };
 
   const validationSchema = Yup.object().shape({
@@ -110,7 +111,7 @@ export default function Home({ userData, setUserData }: any) {
 
   return (
     <section className='container'>
-      {userData && <NavigationMenu userData={userData} />}
+      {userData && <NavigationMenu />}
       <div>
         <article>
           <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={createPost}>
@@ -134,7 +135,7 @@ export default function Home({ userData, setUserData }: any) {
                       </h1>
                       <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={createPost}>
                         <Form id={post.id} onSubmit={updatePost}>
-                          <TextAreaUpdatePost name='content' setContent={setContent} content={content} post={post} />
+                          <TextAreaUpdatePost name='content' post={post} />
                           <button id={post.id} type='submit'>
                             Save
                           </button>
@@ -152,9 +153,9 @@ export default function Home({ userData, setUserData }: any) {
                         </Link>
                       </h1>
                       <p>{post.content}</p>
-                      {post.userId === userData.id && (
+                      {post.userId === userData?.id && (
                         <>
-                          <button id={post.id} onClick={setIdCurrentPost}>
+                          <button id={post.id} onClick={setCurrentPost}>
                             Edit
                           </button>
                           <button id={post.id} onClick={deletePost}>

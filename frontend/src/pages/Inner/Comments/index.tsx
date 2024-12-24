@@ -1,18 +1,28 @@
 import { useHistory, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
+import { getUserDataSelector, setCurrentPostSelector, getPostsSelector } from "../../../store/selectors";
+import { set_current_post, remove_current_post } from "../../../store/actions/currentPost";
 import TextAreaCreateComment from "../../../components/TextAreaCreateComment";
 import TextAreaUpdateContent from "../../../components/TextAreaUpdateComment";
+import { set_content, clear_content } from "../../../store/actions/content";
 import TextAreaUpdatePost from "../../../components/TextAreaUpdatePost";
 import NavigationMenu from "../../../components/NavigationMenu";
 import CommentService from "../../../services/comment.service";
+import { get_user_data } from "../../../store/actions/user";
+import { update_post } from "../../../store/actions/post";
 import PostService from "../../../services/post.service";
-import UserService from "../../../services/user.service";
 import ICommentData from "../../../types/Comment";
+import ACTION_TYPES from "../../../store/types";
 import IPostData from "../../../types/Post";
 
-export default function Comments({ userData, setUserData }: any) {
+export default function Comments() {
+  const currentPost = useSelector(setCurrentPostSelector).currentPost;
+  const userData = useSelector(getUserDataSelector).userData;
+  const posts = useSelector(getPostsSelector).posts;
+
   const initialPostState = {
     id: null,
     userId: null,
@@ -29,11 +39,14 @@ export default function Comments({ userData, setUserData }: any) {
     contents: "",
   };
 
+
+  //продолжить редакс
   const [userPost, setUserPost] = useState<IPostData[]>([initialPostState]) as any;
   const [comments, setComments] = useState<ICommentData[]>([]);
-  const [currentPost, setCurrentPost] = useState<null>(null);
+
   const [content, setContent] = useState<string>("");
   const params = useParams<any>();
+  const dispatch = useDispatch();
   const history = useHistory();
 
   useEffect(() => {
@@ -52,12 +65,12 @@ export default function Comments({ userData, setUserData }: any) {
     }
   }, [userData, userPost]);
 
-  const getUserData = async () => {
+  const getUserData = () => {
     try {
-      const { data } = await UserService.getUserData();
-
-      setUserData(data.data);
+      dispatch(get_user_data());
     } catch (err) {
+      dispatch({ type: ACTION_TYPES.GET_USER_DATA_ERROR });
+
       localStorage.removeItem("token");
 
       history.push("/");
@@ -102,18 +115,16 @@ export default function Comments({ userData, setUserData }: any) {
   const updatePost = async (event: any) => {
     event.preventDefault();
 
-    const updateContent = userPost.id === Number(event.target.id) ? (userPost.content = event.target[0].value) : userPost;
+    posts.map((objPost: IPostData) => (objPost.id === Number(event.target.id) ? (objPost.content = event.target[0].value) : objPost));
 
     try {
-      await PostService.updatePost(Number(event.target.id), userData.id, { content: event.target[0].value });
+      dispatch(update_post(event.target, userData, posts));
 
-      setUserPost(userPost);
+      dispatch(remove_current_post());
 
-      setCurrentPost(null);
-
-      setContent("");
+      dispatch(clear_content());
     } catch (err) {
-      console.error(err);
+      dispatch({ type: ACTION_TYPES.UPDATE_POST_ERROR });
     }
   };
 
@@ -137,7 +148,7 @@ export default function Comments({ userData, setUserData }: any) {
 
       setComments(comments);
 
-      setCurrentPost(null);
+      // setCurrentPost(null);
 
       setContent("");
     } catch (err) {
@@ -155,13 +166,16 @@ export default function Comments({ userData, setUserData }: any) {
     }
   };
 
-  const setIdCurrentPost = ({ target }: any) => {
-    setCurrentPost(target.id);
-    setContent(target.value);
+  const setCurrentPost = ({ target }: any) => {
+    dispatch(set_current_post(target.id));
+
+    dispatch(set_content(target.value));
   };
 
-  const cancelPost = () => {
-    setCurrentPost(null);
+  const cancelPost = (event: any) => {
+    event.preventDefault();
+
+    dispatch(remove_current_post());
   };
 
   const validationSchemaPost = Yup.object().shape({
@@ -174,7 +188,7 @@ export default function Comments({ userData, setUserData }: any) {
 
   return (
     <section className='container'>
-      {userData && <NavigationMenu userData={userData} />}
+      {userData && <NavigationMenu />}
       <div>
         <article>
           {Number(currentPost) === userPost.id ? (
@@ -202,7 +216,7 @@ export default function Comments({ userData, setUserData }: any) {
               <p>{userPost.content}</p>
               {userPost.userId === userData?.id && (
                 <>
-                  <button id={userPost.id} onClick={setIdCurrentPost}>
+                  <button id={userPost.id} onClick={setCurrentPost}>
                     Edit
                   </button>
                   <button id={userPost.id} onClick={deletePost}>
@@ -251,7 +265,7 @@ export default function Comments({ userData, setUserData }: any) {
                       <p>{comment.contents}</p>
                       {comment.userId === userData?.id && (
                         <>
-                          <button id={comment.id} onClick={setIdCurrentPost}>
+                          <button id={comment.id} onClick={setCurrentPost}>
                             Edit
                           </button>
                           <button id={comment.id} onClick={deleteComment}>
@@ -264,7 +278,7 @@ export default function Comments({ userData, setUserData }: any) {
                 </li>
               ))
             ) : (
-              <p>No comments yet...</p>
+              <p>No comments yet... Be the first!</p>
             )}
           </ul>
         </article>
