@@ -4,15 +4,15 @@ module.exports = {
   up: async (queryInterface) =>
     await queryInterface.createTable("comments", {
       id: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
         type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false,
       },
       userId: {
         field: "user_id",
-        allowNull: false,
         type: DataTypes.INTEGER,
+        allowNull: false,
         references: {
           model: "users",
           key: "id",
@@ -22,8 +22,8 @@ module.exports = {
       },
       postId: {
         field: "post_id",
-        allowNull: false,
         type: DataTypes.INTEGER,
+        allowNull: false,
         references: {
           model: "posts",
           key: "id",
@@ -31,23 +31,23 @@ module.exports = {
         onDelete: "cascade",
         onUpdate: "cascade",
       },
-      contents: {
-        allowNull: false,
+      content: {
         type: DataTypes.STRING(500),
+        allowNull: false,
         validate: {
-          notNull: true,
           notEmpty: true,
+          notNull: true,
         },
       },
       createdAt: {
         field: "created_at",
-        allowNull: false,
         type: DataTypes.DATE,
+        allowNull: false,
       },
       updatedAt: {
         field: "updated_at",
-        allowNull: false,
         type: DataTypes.DATE,
+        allowNull: false,
       },
     }),
 

@@ -4,49 +4,49 @@ module.exports = {
   up: async (queryInterface) =>
     await queryInterface.createTable("users", {
       id: {
-        allowNull: false,
+        type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
-        type: DataTypes.INTEGER,
+        allowNull: false,
       },
       firstName: {
         field: "first_name",
+        type: DataTypes.STRING(128),
         allowNull: false,
-        type: DataTypes.STRING,
       },
       lastName: {
         field: "last_name",
+        type: DataTypes.STRING(128),
         allowNull: false,
-        type: DataTypes.STRING,
       },
       userName: {
         field: "user_name",
-        unique: true,
+        type: DataTypes.STRING(128),
         allowNull: false,
-        type: DataTypes.STRING,
+        unique: true,
       },
       email: {
-        unique: true,
+        type: DataTypes.STRING(128),
         allowNull: false,
-        type: DataTypes.STRING,
+        unique: true,
         validate: {
-          notNull: true,
           notEmpty: true,
+          isEmail: true,
         },
       },
       password: {
+        type: DataTypes.STRING(128),
         allowNull: false,
-        type: DataTypes.STRING,
       },
       createdAt: {
         field: "created_at",
-        allowNull: false,
         type: DataTypes.DATE,
+        allowNull: false,
       },
       updatedAt: {
         field: "updated_at",
-        allowNull: false,
         type: DataTypes.DATE,
+        allowNull: false,
       },
     }),
 

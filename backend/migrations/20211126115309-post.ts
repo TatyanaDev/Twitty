@@ -4,15 +4,15 @@ module.exports = {
   up: async (queryInterface) =>
     await queryInterface.createTable("posts", {
       id: {
-        allowNull: false,
+        type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
-        type: DataTypes.INTEGER,
+        allowNull: false,
       },
       userId: {
         field: "user_id",
-        allowNull: false,
         type: DataTypes.INTEGER,
+        allowNull: false,
         references: {
           model: "users",
           key: "id",
@@ -21,22 +21,22 @@ module.exports = {
         onUpdate: "cascade",
       },
       content: {
-        allowNull: false,
         type: DataTypes.STRING(1000),
+        allowNull: false,
         validate: {
-          notNull: true,
           notEmpty: true,
+          notNull: true,
         },
       },
       createdAt: {
         field: "created_at",
-        allowNull: false,
         type: DataTypes.DATE,
+        allowNull: false,
       },
       updatedAt: {
         field: "updated_at",
-        allowNull: false,
         type: DataTypes.DATE,
+        allowNull: false,
       },
     }),
 

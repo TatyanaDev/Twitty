@@ -2,14 +2,16 @@ import { Model, DataTypes, Sequelize } from "sequelize";
 
 export default (sequelize: Sequelize) => {
   class User extends Model {
-    static associate(models: any) {
+    static associate(models) {
       User.hasMany(models.Post, {
         foreignKey: "userId",
+        as: "posts",
         onUpdate: "cascade",
         onDelete: "cascade",
       });
       User.hasMany(models.Comment, {
         foreignKey: "userId",
+        as: "comments",
         onUpdate: "cascade",
         onDelete: "cascade",
       });
@@ -20,32 +22,32 @@ export default (sequelize: Sequelize) => {
     {
       firstName: {
         field: "first_name",
+        type: DataTypes.STRING(128),
         allowNull: false,
-        type: DataTypes.STRING,
       },
       lastName: {
         field: "last_name",
+        type: DataTypes.STRING(128),
         allowNull: false,
-        type: DataTypes.STRING,
       },
       userName: {
         field: "user_name",
-        unique: true,
+        type: DataTypes.STRING(128),
         allowNull: false,
-        type: DataTypes.STRING,
+        unique: true,
       },
       email: {
-        unique: true,
+        type: DataTypes.STRING(128),
         allowNull: false,
-        type: DataTypes.STRING,
+        unique: true,
         validate: {
-          notNull: true,
           notEmpty: true,
+          isEmail: true,
         },
       },
       password: {
+        type: DataTypes.STRING(128),
         allowNull: false,
-        type: DataTypes.STRING,
       },
     },
     {
@@ -53,6 +55,7 @@ export default (sequelize: Sequelize) => {
       modelName: "User",
       tableName: "users",
       underscored: true,
+      timestamps: true,
     }
   );
 

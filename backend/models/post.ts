@@ -1,44 +1,36 @@
 import { Model, DataTypes, Sequelize } from "sequelize";
 
-export interface PostAttributes {
-  id?: number;
-  userId: number;
-  content: string;
-}
-
-export class Post extends Model<PostAttributes> implements PostAttributes {
-  public id!: number;
-  public userId!: number;
-  public content!: string;
-
-  static associate(models: any): void {
-    Post.hasMany(models.Comment, {
-      foreignKey: "postId",
-      onUpdate: "cascade",
-      onDelete: "cascade",
-    });
-    Post.belongsTo(models.User, {
-      foreignKey: "userId",
-      onUpdate: "cascade",
-      onDelete: "cascade",
-    });
+export default (sequelize: Sequelize) => {
+  class Post extends Model {
+    static associate(models) {
+      Post.belongsTo(models.User, {
+        foreignKey: "userId",
+        as: "user",
+        onUpdate: "cascade",
+        onDelete: "cascade",
+      });
+      Post.hasMany(models.Comment, {
+        foreignKey: "postId",
+        as: "comments",
+        onUpdate: "cascade",
+        onDelete: "cascade",
+      });
+    }
   }
-}
 
-export default (sequelize: Sequelize): typeof Post => {
   Post.init(
     {
       userId: {
         field: "user_id",
-        allowNull: false,
         type: DataTypes.INTEGER,
+        allowNull: false,
       },
       content: {
-        allowNull: false,
         type: DataTypes.STRING(1000),
+        allowNull: false,
         validate: {
-          notNull: true,
           notEmpty: true,
+          notNull: true,
         },
       },
     },
@@ -47,6 +39,7 @@ export default (sequelize: Sequelize): typeof Post => {
       modelName: "Post",
       tableName: "posts",
       underscored: true,
+      timestamps: true,
     }
   );
 
