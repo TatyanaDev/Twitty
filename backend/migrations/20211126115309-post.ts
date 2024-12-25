@@ -1,48 +1,44 @@
-"use strict";
+const { DataTypes } = require("sequelize");
 
 module.exports = {
-  up: async (queryInterface, Sequelize) => {
+  up: async (queryInterface) =>
     await queryInterface.createTable("posts", {
       id: {
         allowNull: false,
         primaryKey: true,
         autoIncrement: true,
-        type: Sequelize.INTEGER,
+        type: DataTypes.INTEGER,
       },
       userId: {
-        field: 'user_id',
+        field: "user_id",
         allowNull: false,
-        type: Sequelize.INTEGER,
+        type: DataTypes.INTEGER,
         references: {
-          model: 'users',
-          key: 'id',
+          model: "users",
+          key: "id",
         },
-        onDelete: 'cascade',
-        onUpdate: 'cascade',
+        onDelete: "cascade",
+        onUpdate: "cascade",
       },
       content: {
         allowNull: false,
-        type: Sequelize.STRING(1000),
+        type: DataTypes.STRING(1000),
         validate: {
           notNull: true,
           notEmpty: true,
         },
-        onDelete: 'cascade',
-        onUpdate: 'cascade',
       },
       createdAt: {
         field: "created_at",
         allowNull: false,
-        type: Sequelize.DATE,
+        type: DataTypes.DATE,
       },
       updatedAt: {
         field: "updated_at",
         allowNull: false,
-        type: Sequelize.DATE,
+        type: DataTypes.DATE,
       },
-    });
-  },
-  down: async (queryInterface) => {
-    await queryInterface.dropTable("posts");
-  },
+    }),
+
+  down: async (queryInterface) => await queryInterface.dropTable("posts"),
 };

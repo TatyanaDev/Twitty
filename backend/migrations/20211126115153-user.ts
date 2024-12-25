@@ -1,34 +1,34 @@
-'use strict';
+const { DataTypes } = require("sequelize");
 
 module.exports = {
-  up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('users', {
+  up: async (queryInterface) =>
+    await queryInterface.createTable("users", {
       id: {
         allowNull: false,
         primaryKey: true,
         autoIncrement: true,
-        type: Sequelize.INTEGER
+        type: DataTypes.INTEGER,
       },
       firstName: {
         field: "first_name",
         allowNull: false,
-        type: Sequelize.STRING
+        type: DataTypes.STRING,
       },
       lastName: {
         field: "last_name",
         allowNull: false,
-        type: Sequelize.STRING
+        type: DataTypes.STRING,
       },
       userName: {
         field: "user_name",
         unique: true,
         allowNull: false,
-        type: Sequelize.STRING
+        type: DataTypes.STRING,
       },
       email: {
         unique: true,
         allowNull: false,
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         validate: {
           notNull: true,
           notEmpty: true,
@@ -36,21 +36,19 @@ module.exports = {
       },
       password: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: DataTypes.STRING,
       },
       createdAt: {
         field: "created_at",
         allowNull: false,
-        type: Sequelize.DATE
+        type: DataTypes.DATE,
       },
       updatedAt: {
         field: "updated_at",
         allowNull: false,
-        type: Sequelize.DATE
-      }
-    });
-  },
-  down: async (queryInterface) => {
-    await queryInterface.dropTable('users');
-  }
+        type: DataTypes.DATE,
+      },
+    }),
+
+  down: async (queryInterface) => await queryInterface.dropTable("users"),
 };

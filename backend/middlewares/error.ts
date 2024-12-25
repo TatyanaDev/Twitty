@@ -1,4 +1,3 @@
-export {};
 const ApiError = require("../exceptions/apiError");
 
 module.exports = function (err: any, req: any, res: any, next: any) {

@@ -1,4 +1,3 @@
-export {};
 const { Post } = require("../models");
 const { User } = require("../models");
 interface Post {

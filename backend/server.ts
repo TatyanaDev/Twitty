@@ -1,12 +1,17 @@
 const http = require("http");
-const application = require("./app.ts");
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config();
+}
 
-const server: any = http.createServer(application);
-const port: string | number = process.env.PORT || 5000;
+const app = require("./app");
 
-(function () {
+const server = http.createServer(app);
+
+const PORT = process.env.PORT || 5000;
+
+(() => {
   try {
-    server.listen(port, () => console.log(`Server started on port: ${port}`));
+    server.listen(PORT, () => console.log(`Server is running port ${PORT}`));
   } catch (err) {
     console.error(err);
   }

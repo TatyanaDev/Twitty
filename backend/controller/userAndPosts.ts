@@ -1,4 +1,3 @@
-export {};
 const { validationResult } = require("express-validator");
 const ApiError = require("../exceptions/apiError");
 const { Post } = require("../models");

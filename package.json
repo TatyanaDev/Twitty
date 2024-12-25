@@ -1,0 +1,16 @@
+{
+  "name": "fullstack-twitter",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "start:backend": "cd backend && npm run start",
+    "start:frontend": "cd frontend && npm run start",
+    "start": "concurrently \"npm run start:backend\" \"npm run start:frontend\""
+  },
+  "keywords": [],
+  "author": "Tatyana Karpenko",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^9.1.0"
+  }
+}

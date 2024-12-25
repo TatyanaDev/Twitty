@@ -1,4 +1,3 @@
-export {};
 const { verifyAccessToken } = require("../service/token");
 const ApiError = require("../exceptions/apiError");
 
