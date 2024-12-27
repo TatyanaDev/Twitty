@@ -1,0 +1,7 @@
+POST http://localhost:5000/api/user/1/post/1/comment HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNzM1MzA5ODkwLCJleHAiOjE3MzUzMTM0OTB9.EB_O9EeBpNqan4m8TsewWSreFJCubj9HvxWnHqhXGJk
+Content-Type: application/json
+
+{
+  "content": "This insightful post underscores the significance of community-driven initiatives in spearheading meaningful change. It’s inspiring to see how a united vision and collaborative effort can effectively address and transform societal issues. The case studies not only offer practical insights but also serve as a powerful reminder of the impact we can achieve together. Looking forward to more discussions on such transformative topics!"
+}

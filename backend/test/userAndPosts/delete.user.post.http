@@ -1,2 +1,2 @@
-DELETE http://localhost:5000/api/user/9/post/59 HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIghjo0NTQsImlhdCI6MTYzODUyOTEwMCwiZXhwIjoxNjM4NTMyNzAwfQ.dFDUc-WaroYqHu6YTxQcCVUEBUHLMgzenSlTZVUFby0
+DELETE http://localhost:5000/api/user/1/post/1 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNzM1Mjk0MTIzLCJleHAiOjE3MzUyOTc3MjN9.cxUwLmdtjR6fXKjS0jPWY6lLk1NFvP2ELlGDNmVPFKs

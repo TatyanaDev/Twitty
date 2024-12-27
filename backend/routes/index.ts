@@ -3,7 +3,7 @@ const tokenRouter = require("./token");
 const postRouter = require("./post");
 const userRouter = require("./user");
 
-const router: any = Router();
+const router = Router();
 
 router.use("/post", postRouter);
 

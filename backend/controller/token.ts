@@ -1,9 +1,9 @@
 const { validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
-const { verifyRefreshToken } = require("../service/token");
+const { verifyToken } = require("../service/verifyToken");
 const ApiError = require("../exceptions/apiError");
 
-module.exports.refresh = async (req: any, res: any, next: any) => {
+module.exports.refreshToken = async (req, res, next) => {
   try {
     const { refreshToken: oldRefreshToken } = req.cookies;
 
@@ -11,26 +11,30 @@ module.exports.refresh = async (req: any, res: any, next: any) => {
       throw ApiError.UnauthorizedError();
     }
 
-    const userData = await verifyRefreshToken(oldRefreshToken);
+    const userData = await verifyToken(oldRefreshToken, false);
 
     if (!userData) {
       throw ApiError.UnauthorizedError();
     }
 
-    const { data } = userData;
+    const userId = userData.id;
 
-    const accessToken = jwt.sign({ data }, "secretAccessToken", { expiresIn: "1h" });
-    const refreshToken = jwt.sign({ data }, "secretRefreshToken", { expiresIn: "30d" });
+    if (!process.env.JWT_SECRET_ACCESS_TOKEN || !process.env.JWT_SECRET_REFRESH_TOKEN) {
+      throw ApiError.jwtSecretsNotDefined();
+    }
+
+    const accessToken = jwt.sign({ id: userId }, process.env.JWT_SECRET_ACCESS_TOKEN, { expiresIn: "1h" });
+    const refreshToken = jwt.sign({ id: userId }, process.env.JWT_SECRET_REFRESH_TOKEN, { expiresIn: "30d" });
 
     res.cookie("refreshToken", refreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true }); // 30 days
 
-    return res.status(201).send({ data: { accessToken, refreshToken } });
+    return res.status(200).send({ data: { accessToken, refreshToken } });
   } catch (err) {
     next(err);
   }
 };
 
-module.exports.logout = async (req: any, res: any, next: any) => {
+module.exports.logoutToken = async (req, res, next) => {
   try {
     const errors = validationResult(req);
 
@@ -38,11 +42,11 @@ module.exports.logout = async (req: any, res: any, next: any) => {
       return next(ApiError.BadRequest("Validation error", errors.array()));
     }
 
-    const { refreshToken } = req.cookies;
+    res.clearCookie("refreshToken", {
+      httpOnly: true,
+    });
 
-    res.clearCookie(refreshToken);
-
-    return res.status(200).json({ data: { message: "Refresh token has been removed" } });
+    return res.status(200).send({ data: { message: "Successfully logged out" } });
   } catch (err) {
     next(err);
   }

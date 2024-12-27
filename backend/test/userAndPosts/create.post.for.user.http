@@ -1,0 +1,7 @@
+POST http://localhost:5000/api/user/1/post HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzM1Mjk5ODcwLCJleHAiOjE3MzUzMDM0NzB9.gcDYk4zs3p0fiR-O6vOZcUH-w1gJrkt229VowRF7sM8
+Content-Type: application/json
+
+{
+  "content": "Today, we dive into the transformative power of community-driven initiatives. Exploring a range of successful strategies from diverse sectors, we uncover how collective effort and shared vision can drive significant change. This discussion will highlight key case studies that illustrate the impactful outcomes of collaborative projects, providing insights into the mechanics of effective community engagement and the potential it holds to reshape our social landscape."
+}

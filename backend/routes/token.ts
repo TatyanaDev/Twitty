@@ -1,12 +1,12 @@
-const { body } = require("express-validator");
 const { Router } = require("express");
+const { validateEmail } = require("../middlewares/validators");
 const TokenController = require("../controller/token");
-const authMiddleware = require("../middlewares/auth");
+const authMw = require("../middlewares/auth");
 
-const tokenRouter: any = Router();
+const tokenRouter = Router();
 
-tokenRouter.get("/refresh", TokenController.refresh);
+tokenRouter.get("/refresh", TokenController.refreshToken);
 
-tokenRouter.post("/logout", body("email").isString().notEmpty().isEmail(), authMiddleware, TokenController.logout);
+tokenRouter.post("/logout", authMw, validateEmail, TokenController.logoutToken);
 
 module.exports = tokenRouter;

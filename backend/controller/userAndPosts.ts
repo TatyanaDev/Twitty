@@ -1,15 +1,27 @@
 const { validationResult } = require("express-validator");
 const ApiError = require("../exceptions/apiError");
 const { Post } = require("../models");
-interface PostForUser {
-  id: number;
-  userId: number;
-  content: string;
-  updatedAt?: Date;
-  createdAt?: Date;
-}
 
-module.exports.createPostForUser = async (req: any, res: any, next: any) => {
+module.exports.getUserPosts = async (req, res, next) => {
+  try {
+    const { userId } = req.params;
+
+    const posts = await Post.findAll({
+      where: { userId },
+      order: [["createdAt", "DESC"]],
+    });
+
+    if (!posts.length) {
+      throw ApiError.notFoundError("Posts");
+    }
+
+    res.status(200).send({ data: posts });
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports.createPostForUser = async (req, res, next) => {
   try {
     const errors = validationResult(req);
 
@@ -17,19 +29,13 @@ module.exports.createPostForUser = async (req: any, res: any, next: any) => {
       return next(ApiError.BadRequest("Validation error", errors.array()));
     }
 
-    const {
-      params: { userId },
-      body,
-    } = req;
+    const { userId } = req.params;
+    const { content } = req.body;
 
-    body.userId = userId;
+    const createdPost = await Post.create({ userId, content });
 
-    const createdPost: PostForUser = await Post.create(body);
-
-    const { id: postId } = createdPost;
-
-    if (!postId) {
-      return res.status(400).send({ error: "Error when creating a post" });
+    if (!createdPost) {
+      throw ApiError.createResourceError("post");
     }
 
     res.status(201).send({ data: createdPost });
@@ -38,76 +44,54 @@ module.exports.createPostForUser = async (req: any, res: any, next: any) => {
   }
 };
 
-module.exports.getUserPosts = async (req: any, res: any, next: any) => {
+module.exports.updateUserPost = async (req, res, next) => {
   try {
-    const {
-      params: { userId },
-    } = req;
+    const errors = validationResult(req);
 
-    const posts: PostForUser[] = await Post.findAll({ where: { userId } });
-
-    if (!posts.length) {
-      return res.status(404).send({ error: "Posts not found" });
+    if (!errors.isEmpty()) {
+      return next(ApiError.BadRequest("Validation error", errors.array()));
     }
 
-    res.status(200).send({ data: posts.slice().sort((a: PostForUser, b: PostForUser) => b.id - a.id) });
+    const { postId } = req.params;
+
+    const foundPost = await Post.findOne({ where: { id: postId } });
+
+    if (!foundPost) {
+      throw ApiError.notFoundError("Post");
+    }
+
+    const [, [updatedPost]] = await Post.update(req.body, {
+      where: { id: postId },
+      returning: true,
+    });
+
+    if (!updatedPost) {
+      throw ApiError.updateResourceError("post");
+    }
+
+    res.status(200).send({ data: updatedPost });
   } catch (err) {
     next(err);
   }
 };
 
-module.exports.updateUserPost = async (req: any, res: any, next: any) => {
+module.exports.deleteUserPost = async (req, res, next) => {
   try {
-    const {
-      params: { postId: id, userId },
-      body,
-    } = req;
+    const { postId } = req.params;
 
-    const findPost: PostForUser = await Post.findOne({ where: { id } });
+    const foundPost = await Post.findOne({ where: { id: postId } });
 
-    if (!findPost) {
-      return res.status(404).send({ error: "Post not found" });
+    if (!foundPost) {
+      throw ApiError.notFoundError("Post");
     }
 
-    if (findPost.userId === Number(userId)) {
-      const [rowsCount, [updatePost]] = await Post.update(body, { where: { id }, returning: true });
+    const rowsCount = await Post.destroy({ where: { id: postId } });
 
-      if (rowsCount !== 1) {
-        return res.status(400).send({ error: "User post has not been updated" });
-      }
-
-      return res.status(200).send({ data: updatePost });
+    if (rowsCount !== 1) {
+      throw ApiError.notFoundError("Post");
     }
 
-    res.status(409).send({ error: "No such post was found for the user" });
-  } catch (err) {
-    next(err);
-  }
-};
-
-module.exports.deleteUserPost = async (req: any, res: any, next: any) => {
-  try {
-    const {
-      params: { postId: id, userId },
-    } = req;
-
-    const findPost: PostForUser = await Post.findOne({ where: { id } });
-
-    if (!findPost) {
-      return res.status(404).send({ error: "Posts not found" });
-    }
-
-    if (findPost.userId === Number(userId)) {
-      const rowsCount: number = await Post.destroy({ where: { id } });
-
-      if (!rowsCount) {
-        return res.status(404).send({ error: "Post has already been deleted" });
-      }
-
-      return res.status(200).send({ data: `${rowsCount} post successfully deleted` });
-    }
-
-    res.status(404).send({ error: "User is not found" });
+    res.status(200).send({ data: { postId } });
   } catch (err) {
     next(err);
   }

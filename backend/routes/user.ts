@@ -1,24 +1,17 @@
-const { body } = require("express-validator");
 const { Router } = require("express");
-const PostAndCommentsController = require("../controller/postAndComments");
-const UserAndPostsController = require("../controller/userAndPosts");
-const authMiddleware = require("../middlewares/auth");
+const { validateUserRegistration, validateUserLogin } = require("../middlewares/validators");
+const userAndPostsRouter = require("./userAndPosts");
 const UserController = require("../controller/user");
+const authMw = require("../middlewares/auth");
 
-const userRouter: any = Router();
+const userRouter = Router();
 
-userRouter.post("/register", body("firstName").isString().notEmpty(), body("lastName").isString().notEmpty(), body("userName").isString().notEmpty(), body("email").isString().notEmpty().isEmail(), body("password").isString().isLength({ min: 6 }), UserController.createUser);
+userRouter.post("/register", validateUserRegistration, UserController.registerUser);
 
-userRouter.post("/login", body("email").isString().notEmpty().isEmail(), body("password").isString().isLength({ min: 6 }), UserController.checkUser);
+userRouter.post("/login", validateUserLogin, UserController.loginUser);
 
-userRouter.get("/data", authMiddleware, UserController.getUserInfo);
+userRouter.get("/", authMw, UserController.getUser);
 
-userRouter.route("/:userId/post").get(authMiddleware, UserAndPostsController.getUserPosts).post(authMiddleware, body("content").isString().notEmpty(), UserAndPostsController.createPostForUser);
-
-userRouter.route("/:userId/post/:postId").patch(authMiddleware, UserAndPostsController.updateUserPost).delete(authMiddleware, UserAndPostsController.deleteUserPost);
-
-userRouter.route("/:userId/post/:postId/comment").post(authMiddleware, body("contents").isString().notEmpty(), PostAndCommentsController.createCommentForPost);
-
-userRouter.route("/:userId/post/:postId/comment/:commentId").patch(authMiddleware, PostAndCommentsController.updatePostComment).delete(authMiddleware, PostAndCommentsController.deletePostComment);
+userRouter.use("/:userId/post", authMw, userAndPostsRouter);
 
 module.exports = userRouter;

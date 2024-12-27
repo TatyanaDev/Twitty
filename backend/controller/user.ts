@@ -3,18 +3,8 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const ApiError = require("../exceptions/apiError");
 const { User } = require("../models");
-interface User {
-  id: number;
-  firstName: string;
-  lastName: string;
-  userName: string;
-  email: string;
-  password?: string;
-  updatedAt?: Date;
-  createdAt?: Date;
-}
 
-module.exports.createUser = async (req: any, res: any, next: any) => {
+module.exports.registerUser = async (req, res, next) => {
   try {
     const errors = validationResult(req);
 
@@ -22,67 +12,34 @@ module.exports.createUser = async (req: any, res: any, next: any) => {
       return next(ApiError.BadRequest("Validation error", errors.array()));
     }
 
-    const { body } = req;
+    const { userName, email, password } = req.body;
 
-    const checkEmail = await User.findOne({ where: { email: body.email } });
+    const existingEmail = await User.findOne({ where: { email } });
 
-    if (checkEmail) {
-      throw ApiError.checkEmailError();
+    if (existingEmail) {
+      throw ApiError.existingEmailError();
     }
 
-    const checkUserName = await User.findOne({ where: { userName: body.userName } });
+    const existingUserName = await User.findOne({ where: { userName } });
 
-    if (checkUserName) {
-      throw ApiError.checkUserNameError();
+    if (existingUserName) {
+      throw ApiError.existingUserNameError();
     }
 
-    body.password = bcrypt.hashSync(body.password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-    const createdUser: User = await User.create(body);
+    const createdUser = await User.create({ ...req.body, password: hashedPassword });
 
-    const { id } = createdUser;
-
-    if (!id) {
-      throw ApiError.createUserError();
+    if (!createdUser) {
+      throw ApiError.createResourceError("user");
     }
 
-    const accessToken = jwt.sign({ data: id }, "secretAccessToken", { expiresIn: "1h" });
-    const refreshToken = jwt.sign({ data: id }, "secretRefreshToken", { expiresIn: "30d" });
-
-    res.cookie("refreshToken", refreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true }); // 30 days
-
-    return res.status(201).send({ data: { accessToken, refreshToken } });
-  } catch (err: any) {
-    next(err);
-  }
-};
-
-module.exports.checkUser = async (req: any, res: any, next: any) => {
-  try {
-    const errors = validationResult(req);
-
-    if (!errors.isEmpty()) {
-      return next(ApiError.BadRequest("Validation error", errors.array()));
+    if (!process.env.JWT_SECRET_ACCESS_TOKEN || !process.env.JWT_SECRET_REFRESH_TOKEN) {
+      throw ApiError.jwtSecretsNotDefined();
     }
 
-    const { body } = req;
-
-    const checkUser: User = await User.findOne({ where: { email: body.email } });
-
-    if (!checkUser) {
-      throw ApiError.checkUserError();
-    }
-
-    const { id } = checkUser;
-
-    const checkPassword = await bcrypt.compare(body.password, checkUser.password);
-
-    if (!checkPassword) {
-      throw ApiError.invalidPasswordError();
-    }
-
-    const accessToken = jwt.sign({ data: id }, "secretAccessToken", { expiresIn: "1h" });
-    const refreshToken = jwt.sign({ data: id }, "secretRefreshToken", { expiresIn: "30d" });
+    const accessToken = jwt.sign({ id: createdUser.id }, process.env.JWT_SECRET_ACCESS_TOKEN, { expiresIn: "1h" });
+    const refreshToken = jwt.sign({ id: createdUser.id }, process.env.JWT_SECRET_REFRESH_TOKEN, { expiresIn: "30d" });
 
     res.cookie("refreshToken", refreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true }); // 30 days
 
@@ -92,17 +49,54 @@ module.exports.checkUser = async (req: any, res: any, next: any) => {
   }
 };
 
-module.exports.getUserInfo = async (req: any, res: any, next: any) => {
+module.exports.loginUser = async (req, res, next) => {
   try {
-    const { userData } = req;
+    const errors = validationResult(req);
 
-    const data: User = await User.findOne({ where: { id: userData.data }, attributes: { exclude: ["password", "createdAt", "updatedAt"] } });
-
-    if (!data) {
-      throw ApiError.UnauthorizedError();
+    if (!errors.isEmpty()) {
+      return next(ApiError.BadRequest("Validation error", errors.array()));
     }
 
-    return res.status(200).send({ data });
+    const { email, password } = req.body;
+
+    const user = await User.findOne({ where: { email } });
+
+    if (!user) {
+      throw ApiError.notFoundError("User");
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordValid) {
+      throw ApiError.invalidPasswordError();
+    }
+
+    if (!process.env.JWT_SECRET_ACCESS_TOKEN || !process.env.JWT_SECRET_REFRESH_TOKEN) {
+      throw ApiError.jwtSecretsNotDefined();
+    }
+
+    const accessToken = jwt.sign({ id: user.id }, process.env.JWT_SECRET_ACCESS_TOKEN, { expiresIn: "1h" });
+    const refreshToken = jwt.sign({ id: user.id }, process.env.JWT_SECRET_REFRESH_TOKEN, { expiresIn: "30d" });
+
+    res.cookie("refreshToken", refreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true }); // 30 days
+
+    return res.status(200).send({ data: { accessToken, refreshToken } });
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports.getUser = async (req, res, next) => {
+  try {
+    const { id } = req.userData;
+
+    const user = await User.findOne({ where: { id }, attributes: { exclude: ["password", "createdAt", "updatedAt"] } });
+
+    if (!user) {
+      throw ApiError.notFoundError("User");
+    }
+
+    return res.status(200).send({ data: { user } });
   } catch (err) {
     next(err);
   }

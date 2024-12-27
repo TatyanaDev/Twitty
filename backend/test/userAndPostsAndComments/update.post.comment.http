@@ -1,0 +1,7 @@
+PATCH http://localhost:5000/api/user/1/post/1/comment/1 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzM1MzEwNjM0LCJleHAiOjE3MzUzMTQyMzR9.mKYNwzCa8bv4x-bp-mB5Ly-IvE0TkhNXCb2aiJWdgeQ
+Content-Type: application/json
+
+{
+  "content": "A fantastic read! It's incredibly motivating to learn about the success of community-driven initiatives across various sectors. These case studies highlight the power of collaboration and shared goals in creating sustainable change. This approach certainly seems like a viable pathway for addressing many of our current social challenges. Keep up the great work, and please continue to share more about these impactful projects!"
+}

@@ -1,2 +1,2 @@
-GET http://localhost:5000/api/user/9/post HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhhjIjo0NTUsImlhdCI6MTYzODUyOTM0OCwiZXhwIjoxNjM4NTMyOTQ4fQ.iv7Ah5sLy1KEsQL6gW9Z_noqZu_MpqOV2f27Roc9jCM
+GET http://localhost:5000/api/user/1/post HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzM1MjI3MjY4LCJleHAiOjE3MzUyMzA4Njh9.5TbL3R5Xc58u_OCAidz8vWFtez-z9ge6p5Ns2k5KAA0

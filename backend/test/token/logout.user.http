@@ -1,7 +1,0 @@
-POST http://localhost:5000/api/token/logout HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjo0ODMsImlhdCI6MTYzODg3MTE0MCwiZXhwIjoxNjM4ODc0NzQwfQ.jkEx_I_fpJ6zTKr9rPeUrurpNyeAdZIYwztRcphFoEw
-Content-Type: application/json
-
-{
-  "email": "testoch9830@gmail.com"
-} 

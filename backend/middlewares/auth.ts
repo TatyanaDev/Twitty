@@ -1,27 +1,28 @@
-const { verifyAccessToken } = require("../service/token");
+const { verifyToken } = require("../service/verifyToken");
 const ApiError = require("../exceptions/apiError");
 
-module.exports = function (req: any, res: any, next: any) {
+module.exports = (req, res, next) => {
   try {
-    const authorizationHeader = req.headers.authorization;
+    const { authorization } = req.headers;
 
-    if (!authorizationHeader) {
+    if (!authorization || !authorization.startsWith("Bearer ")) {
       return next(ApiError.UnauthorizedError());
     }
 
-    const accessToken = authorizationHeader.split(" ")[1];
+    const token = authorization.split(" ")[1];
 
-    if (!accessToken) {
+    if (!token) {
       return next(ApiError.UnauthorizedError());
     }
 
-    const userData = verifyAccessToken(accessToken);
+    const userData = verifyToken(token);
 
     if (!userData) {
       return next(ApiError.UnauthorizedError());
     }
 
     req.userData = userData;
+
     next();
   } catch (err) {
     return next(ApiError.UnauthorizedError());

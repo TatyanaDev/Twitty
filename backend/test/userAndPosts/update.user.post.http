@@ -1,7 +1,7 @@
-PATCH http://localhost:5000/api/user/1/post/58 HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjo0NTUsImlhdCI6MTYzODUyOTM0OCwiZXhwIjoxNjM4NTMyOTQ4fQ.iv7Ah5sLy1KEsQL6gW9Z_noqZu_MpqOV2f27Roc9jCM
+PATCH http://localhost:5000/api/user/1/post/1 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNzM1Mjk0MTIzLCJleHAiOjE3MzUyOTc3MjN9.cxUwLmdtjR6fXKjS0jPWY6lLk1NFvP2ELlGDNmVPFKs
 Content-Type: application/json
 
 {
-  "content":"5"
+  "content": "In today's rapidly evolving tech landscape, effective leadership goes beyond just managing teams. It involves pioneering innovative strategies, fostering a culture of continuous learning, and leveraging technology to enhance operational efficiency. This post explores how leaders in the technology sector can harness cutting-edge tools and methodologies to drive growth, inspire innovation, and maintain a competitive edge. We'll dive into real-world examples of tech-driven leadership successes, discuss tools that are reshaping management practices, and provide actionable insights on integrating technology into your leadership approach to achieve transformative results."
 }

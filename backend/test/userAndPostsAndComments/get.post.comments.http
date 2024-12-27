@@ -1,0 +1,2 @@
+GET http://localhost:5000/api/user/1/post/1/comment HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNzM1MzA1Njc5LCJleHAiOjE3MzUzMDkyNzl9.Pq33NWt7w-OgdRTBc7Jx_BPwuGLGtke4Gg-CUCnuOvI

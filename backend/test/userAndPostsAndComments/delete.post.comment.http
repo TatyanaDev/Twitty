@@ -1,0 +1,2 @@
+DELETE http://localhost:5000/api/user/1/post/1/comment/1 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzM1MzEwNjM0LCJleHAiOjE3MzUzMTQyMzR9.mKYNwzCa8bv4x-bp-mB5Ly-IvE0TkhNXCb2aiJWdgeQ
