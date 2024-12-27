@@ -39,7 +39,6 @@ export default function Comments() {
     contents: "",
   };
 
-
   //продолжить редакс
   const [userPost, setUserPost] = useState<IPostData[]>([initialPostState]) as any;
   const [comments, setComments] = useState<ICommentData[]>([]);
@@ -187,7 +186,7 @@ export default function Comments() {
   });
 
   return (
-    <section className='container'>
+    <section className="container">
       {userData && <NavigationMenu />}
       <div>
         <article>
@@ -198,8 +197,8 @@ export default function Comments() {
               </h1>
               <Formik initialValues={initialValuesPost} validationSchema={validationSchemaPost} onSubmit={createComment}>
                 <Form id={userPost.id} onSubmit={updatePost}>
-                  <TextAreaUpdatePost name='content' setContent={setContent} content={content} post={userPost} />
-                  <button id={userPost.id} type='submit'>
+                  <TextAreaUpdatePost name="content" setContent={setContent} content={content} post={userPost} />
+                  <button id={userPost.id} type="submit">
                     Save
                   </button>
                   <button id={userPost.id} onClick={cancelPost}>
@@ -230,8 +229,8 @@ export default function Comments() {
         <article>
           <Formik initialValues={initialValuesComment} validationSchema={validationSchemaComment} onSubmit={createComment}>
             <Form>
-              <TextAreaCreateComment name='contents' />
-              <button type='submit'>Comment</button>
+              <TextAreaCreateComment name="contents" />
+              <button type="submit">Comment</button>
             </Form>
           </Formik>
         </article>
@@ -247,8 +246,8 @@ export default function Comments() {
                       </h1>
                       <Formik initialValues={initialValuesComment} validationSchema={validationSchemaComment} onSubmit={createComment}>
                         <Form id={comment.id} onSubmit={updateComment}>
-                          <TextAreaUpdateContent name='contents' setContent={setContent} content={content} comment={comment} />
-                          <button id={comment.id} type='submit'>
+                          <TextAreaUpdateContent name="contents" setContent={setContent} content={content} comment={comment} />
+                          <button id={comment.id} type="submit">
                             Save
                           </button>
                           <button id={comment.id} onClick={cancelPost}>

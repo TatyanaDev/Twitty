@@ -28,7 +28,7 @@ export default function Settings() {
   };
 
   return (
-    <section className='container'>
+    <section className="container">
       {userData && <NavigationMenu />}
       <p>Settings</p>
     </section>

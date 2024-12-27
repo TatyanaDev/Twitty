@@ -20,14 +20,14 @@ export default function App() {
   return (
     <section>
       <Switch>
-        <Route exact path='/' render={() => (checkOnAuth() ? <Home /> : <HomeGuest />)} />
-        <Route exact path='/messages' render={() => <Messages />} />
-        <Route exact path='/settings' render={() => <Settings />} />
-        <Route exact path='/profile' render={() => <Profile />} />
-        <Route exact path='/register' render={() => <SignUp />} />
-        <Route exact path='/login' render={() => <SignIn />} />
-        <Route exact path='/posts/:id' render={() => <Comments />} />
-        <Route exact path='/:userName' render={() => <Users />} />
+        <Route exact path="/" render={() => (checkOnAuth() ? <Home /> : <HomeGuest />)} />
+        <Route exact path="/messages" render={() => <Messages />} />
+        <Route exact path="/settings" render={() => <Settings />} />
+        <Route exact path="/profile" render={() => <Profile />} />
+        <Route exact path="/register" render={() => <SignUp />} />
+        <Route exact path="/login" render={() => <SignIn />} />
+        <Route exact path="/posts/:id" render={() => <Comments />} />
+        <Route exact path="/:userName" render={() => <Users />} />
       </Switch>
     </section>
   );

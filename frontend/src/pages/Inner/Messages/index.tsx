@@ -28,7 +28,7 @@ export default function Messages() {
   };
 
   return (
-    <section className='container'>
+    <section className="container">
       {userData && <NavigationMenu />}
       <p>Messages</p>
     </section>

@@ -4,9 +4,11 @@ import content from "./content";
 import userData from "./user";
 import posts from "./post";
 
-export default combineReducers({
+const rootReducer = combineReducers({
   currentPost,
   userData,
   content,
   posts,
 });
+
+export default rootReducer;

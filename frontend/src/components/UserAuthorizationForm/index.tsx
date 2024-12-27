@@ -6,20 +6,20 @@ export default function UserAuthorisationForm({ errors, touched }: any) {
   return (
     <Form>
       <label className={style.label}>User name (email) </label>
-      <Field name='email' />
+      <Field name="email" />
       {errors.email && touched.email && <p>{errors.email}</p>}
 
       <label className={style.label}>Password </label>
-      <Field name='password' />
+      <Field name="password" />
       {errors.password && touched.password && <p>{errors.password}</p>}
 
       <nav>
         <ul>
           <li>
-            <button type='submit'>Sign in</button>
+            <button type="submit">Sign in</button>
           </li>
           <li>
-            <Link to='/register'>Sign up</Link>
+            <Link to="/register">Sign up</Link>
           </li>
         </ul>
       </nav>

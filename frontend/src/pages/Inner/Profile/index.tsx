@@ -28,7 +28,7 @@ export default function Profile() {
   };
 
   return (
-    <section className='container'>
+    <section className="container">
       {userData && <NavigationMenu />}
       <p>Profile</p>
     </section>

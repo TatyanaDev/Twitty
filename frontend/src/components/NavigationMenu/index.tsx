@@ -12,19 +12,19 @@ export default function NavigationMenu() {
           <nav>
             <ul>
               <li>
-                <Link to='/'>Home</Link>
+                <Link to="/">Home</Link>
               </li>
               <li>
-                <Link to='/messages'>Messages</Link>
+                <Link to="/messages">Messages</Link>
               </li>
               <li>
                 <Link to={`/${userData?.userName}`}>Users</Link>
               </li>
               <li>
-                <Link to='/profile'>Profile</Link>
+                <Link to="/profile">Profile</Link>
               </li>
               <li>
-                <Link to='/settings'>Settings</Link>
+                <Link to="/settings">Settings</Link>
               </li>
             </ul>
           </nav>

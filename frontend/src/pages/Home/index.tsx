@@ -110,14 +110,14 @@ export default function Home() {
   });
 
   return (
-    <section className='container'>
+    <section className="container">
       {userData && <NavigationMenu />}
       <div>
         <article>
           <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={createPost}>
             <Form>
-              <TextAreaCreatePost name='content' />
-              <button type='submit'>Tweet</button>
+              <TextAreaCreatePost name="content" />
+              <button type="submit">Tweet</button>
             </Form>
           </Formik>
         </article>
@@ -135,8 +135,8 @@ export default function Home() {
                       </h1>
                       <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={createPost}>
                         <Form id={post.id} onSubmit={updatePost}>
-                          <TextAreaUpdatePost name='content' post={post} />
-                          <button id={post.id} type='submit'>
+                          <TextAreaUpdatePost name="content" post={post} />
+                          <button id={post.id} type="submit">
                             Save
                           </button>
                           <button id={post.id} onClick={cancelPost}>
