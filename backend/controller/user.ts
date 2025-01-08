@@ -90,13 +90,13 @@ module.exports.getUser = async (req, res, next) => {
   try {
     const { id } = req.userData;
 
-    const user = await User.findOne({ where: { id }, attributes: { exclude: ["password", "createdAt", "updatedAt"] } });
+    const { dataValues } = await User.findOne({ where: { id }, attributes: { exclude: ["password", "createdAt", "updatedAt"] } });
 
-    if (!user) {
+    if (!dataValues) {
       throw ApiError.notFoundError("User");
     }
 
-    return res.status(200).send({ data: { user } });
+    return res.status(200).send({ data: { ...dataValues } });
   } catch (err) {
     next(err);
   }

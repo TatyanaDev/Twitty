@@ -4,6 +4,7 @@ const { User, Post } = require("../models");
 module.exports.getPosts = async (req, res, next) => {
   try {
     const posts = await Post.findAll({
+      order: [["createdAt", "DESC"]],
       include: {
         model: User,
         as: "user",
