@@ -1,17 +1,31 @@
 * {
   box-sizing: border-box;
+  padding: 0;
+  margin: 0;
 }
 
 body {
+  font-family: sans-serif;
   max-width: 1440px;
   margin: 0 auto;
-  font-family: sans-serif;
 }
 
-li {
+button {
+  cursor: pointer;
+}
+
+ul {
   list-style: none;
 }
 
-.container {
+.d-block {
+  display: block;
+}
+
+.d-flex {
   display: flex;
+}
+
+.color-red {
+  color: #ff0000;
 }
