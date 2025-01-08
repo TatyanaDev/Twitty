@@ -7,12 +7,12 @@ export default class PostService {
     return http.get<PostsResponse>("/post");
   }
 
-  static async createPost(userId: number, data: { content: string }): Promise<AxiosResponse<any>> {
-    return http.post<IPostData>(`/user/${userId}/post`, data);
+  static async createPost(userId: number, post: { content: string }): Promise<AxiosResponse<any>> {
+    return http.post<IPostData>(`/user/${userId}/post`, post);
   }
 
-  static async updatePost(userId: number, postId: number, data: { content: string }): Promise<AxiosResponse<any>> {
-    return http.patch<IPostData>(`/user/${userId}/post/${postId}`, data);
+  static async updatePost(userId: number, postId: number, post: { content: string }): Promise<AxiosResponse<any>> {
+    return http.patch<IPostData>(`/user/${userId}/post/${postId}`, post);
   }
 
   static async deletePost(userId: number, postId: number): Promise<AxiosResponse<any>> {

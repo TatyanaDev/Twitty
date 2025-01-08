@@ -19,7 +19,7 @@ export default function CreatePostForm() {
 
   const handleSubmit = (values: { content: string }, formikBag: any) => {
     if (user) {
-      dispatch(createPost({ userId: user.id, content: values.content }));
+      dispatch(createPost(user.id, values.content));
       formikBag.resetForm();
     }
   };

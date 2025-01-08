@@ -19,7 +19,7 @@ export default function CreateCommentForm({ postId }: { postId: number }) {
 
   const handleSubmit = (values: { content: string }, formikBag: any) => {
     if (user) {
-      dispatch(createComment({ userId: user.id, postId, content: values.content }));
+      dispatch(createComment(user.id, postId, values.content));
 
       formikBag.resetForm();
     }

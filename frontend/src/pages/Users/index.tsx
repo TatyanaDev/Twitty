@@ -2,10 +2,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { deletePost, updatePost } from "../../store/actions/postActions";
-import { getUser } from "../../store/actions/userActions";
 import NavigationMenu from "../../components/NavigationMenu";
 import CreatePostForm from "../../components/CreatePostForm";
 import UpdatePostForm from "../../components/UpdatePostForm";
+import { getUser } from "../../store/actions/userActions";
 import { userSelector } from "../../store/selectors";
 import IPostData from "../../types/Post";
 
@@ -40,7 +40,7 @@ export default function Users({ posts }: { posts: IPostData[] }) {
     if (user && editingPostId !== null) {
       const { content } = updatedPost;
 
-      dispatch(updatePost(user.id, editingPostId, { content }));
+      dispatch(updatePost(user.id, editingPostId, content));
 
       setEditingPostId(null);
     }

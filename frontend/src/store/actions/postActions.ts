@@ -14,11 +14,11 @@ export const getPosts = () => async (dispatch: Dispatch) => {
   }
 };
 
-export const createPost = (postData: { userId: number; content: string }) => async (dispatch: Dispatch) => {
+export const createPost = (userId: number, content: string) => async (dispatch: Dispatch) => {
   dispatch({ type: ACTION_TYPES.CREATE_POST_REQUEST });
 
   try {
-    const { data } = await PostService.createPost(postData.userId, { content: postData.content });
+    const { data } = await PostService.createPost(userId, { content });
 
     dispatch({ type: ACTION_TYPES.CREATE_POST_SUCCESS, payload: data.data });
   } catch (error) {
@@ -26,11 +26,11 @@ export const createPost = (postData: { userId: number; content: string }) => asy
   }
 };
 
-export const updatePost = (userId: number, postId: number, updatedPost: { content: string }) => async (dispatch: Dispatch) => {
+export const updatePost = (userId: number, postId: number, content: string) => async (dispatch: Dispatch) => {
   dispatch({ type: ACTION_TYPES.UPDATE_POST_REQUEST });
 
   try {
-    const { data } = await PostService.updatePost(userId, postId, updatedPost);
+    const { data } = await PostService.updatePost(userId, postId, { content });
 
     dispatch({ type: ACTION_TYPES.UPDATE_POST_SUCCESS, payload: data.data });
   } catch (error) {

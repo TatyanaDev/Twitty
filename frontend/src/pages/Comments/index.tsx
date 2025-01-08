@@ -6,9 +6,9 @@ import { deletePost, updatePost } from "../../store/actions/postActions";
 import { commentsSelector, userSelector } from "../../store/selectors";
 import CreateCommentForm from "../../components/CreateCommentForm";
 import UpdateCommentForm from "../../components/UpdateCommentForm";
-import { getUser } from "../../store/actions/userActions";
 import NavigationMenu from "../../components/NavigationMenu";
 import UpdatePostForm from "../../components/UpdatePostForm";
+import { getUser } from "../../store/actions/userActions";
 import ICommentData from "../../types/Comment";
 import IPostData from "../../types/Post";
 
@@ -38,7 +38,7 @@ export default function Comments({ posts }: { posts: IPostData[] }) {
     if (user && editingPostId !== null) {
       const { content } = updatedPost;
 
-      dispatch(updatePost(user.id, editingPostId, { content }));
+      dispatch(updatePost(user.id, editingPostId, content));
 
       handleCancelEditPost();
     }
@@ -48,7 +48,7 @@ export default function Comments({ posts }: { posts: IPostData[] }) {
     if (user && params.id !== null && editingCommentId !== null) {
       const { content } = updatedComment;
 
-      dispatch(updateComment(user.id, params.id, editingCommentId, { content }));
+      dispatch(updateComment(user.id, params.id, editingCommentId, content));
 
       handleCancelEditComment();
     }

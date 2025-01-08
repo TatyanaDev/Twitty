@@ -14,11 +14,11 @@ export const getComments = (userId: number, postId: number) => async (dispatch: 
   }
 };
 
-export const createComment = (commentData: { userId: number; postId: number; content: string }) => async (dispatch: Dispatch) => {
+export const createComment = (userId: number, postId: number, content: string) => async (dispatch: Dispatch) => {
   dispatch({ type: ACTION_TYPES.CREATE_COMMENT_REQUEST });
 
   try {
-    const { data } = await CommentService.createComment(commentData.userId, commentData.postId, { content: commentData.content });
+    const { data } = await CommentService.createComment(userId, postId, { content });
 
     dispatch({ type: ACTION_TYPES.CREATE_COMMENT_SUCCESS, payload: data.data });
   } catch (error) {
@@ -26,11 +26,11 @@ export const createComment = (commentData: { userId: number; postId: number; con
   }
 };
 
-export const updateComment = (userId: number, postId: number, commentId: number, updatedComment: { content: string }) => async (dispatch: Dispatch) => {
+export const updateComment = (userId: number, postId: number, commentId: number, content: string) => async (dispatch: Dispatch) => {
   dispatch({ type: ACTION_TYPES.UPDATE_COMMENT_REQUEST });
 
   try {
-    const { data } = await CommentService.updateComment(userId, postId, commentId, updatedComment);
+    const { data } = await CommentService.updateComment(userId, postId, commentId, { content });
 
     dispatch({ type: ACTION_TYPES.UPDATE_COMMENT_SUCCESS, payload: data.data });
   } catch (error) {

@@ -1,9 +1,7 @@
 import { Dispatch } from "redux";
 import { UserRegistrationFormValues } from "../../components/UserRegistrationForm";
 import { UserLoginFormValues } from "../../components/UserLoginForm";
-import AuthService from "../../services/auth.service";
 import UserService from "../../services/user.service";
-import IUserData from "../../types/User";
 import ACTION_TYPES from "./actionTypes";
 
 export const getUser = () => async (dispatch: Dispatch) => {
@@ -24,7 +22,7 @@ export const registerUser = (user: UserRegistrationFormValues) => async (dispatc
   dispatch({ type: ACTION_TYPES.REGISTER_USER_REQUEST });
 
   try {
-    const { data } = await AuthService.registerUser(user);
+    const { data } = await UserService.registerUser(user);
 
     const { accessToken, refreshToken } = data.data;
 
@@ -47,7 +45,7 @@ export const loginUser = (user: UserLoginFormValues) => async (dispatch: Dispatc
   dispatch({ type: ACTION_TYPES.LOGIN_USER_REQUEST });
 
   try {
-    const { data } = await AuthService.loginUser(user);
+    const { data } = await UserService.loginUser(user);
 
     const { accessToken, refreshToken } = data.data;
 
@@ -66,14 +64,14 @@ export const loginUser = (user: UserLoginFormValues) => async (dispatch: Dispatc
   }
 };
 
-export const logout_user = (user: IUserData) => async (dispatch: any) => {
-  dispatch({ type: ACTION_TYPES.LOGOUT_USER_DATA_REQUEST });
+// export const logout_user = (user: IUserData) => async (dispatch: any) => {
+//   dispatch({ type: ACTION_TYPES.LOGOUT_USER_DATA_REQUEST });
 
-  localStorage.removeItem("token");
+//   localStorage.removeItem("token");
 
-  // await AuthService.logout({ email: user.email });
+//   // await AuthService.logout({ email: user.email });
 
-  dispatch({ type: ACTION_TYPES.LOGOUT_USER_DATA_SUCCESS });
+//   dispatch({ type: ACTION_TYPES.LOGOUT_USER_DATA_SUCCESS });
 
-  localStorage.removeItem("token");
-};
+//   localStorage.removeItem("token");
+// };
