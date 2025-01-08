@@ -1,22 +1,27 @@
 import { AxiosResponse } from "axios";
-import IAuthResponse from "../types/AuthResponse";
+import { UserRegistrationFormValues } from "../components/UserRegistrationForm";
+import { UserLoginFormValues } from "../components/UserLoginForm";
+import IAuthData, { AuthResponse } from "../types/Auth";
 import IUserData from "../types/User";
-import api from "../http-common";
+import http from "../api";
 
 export default class AuthService {
-  static async registration(data: IUserData): Promise<AxiosResponse<any>> {
-    return api.post<IAuthResponse>("/user/register", data);
+  static async registerUser(user: UserRegistrationFormValues): Promise<AxiosResponse<AuthResponse>> {
+    return http.post<AuthResponse>("/user/register", user);
   }
+
+  static async loginUser(user: UserLoginFormValues): Promise<AxiosResponse<AuthResponse>> {
+    return http.post<AuthResponse>("/user/login", user);
+  }
+
+
+
 
   static async refresh(): Promise<AxiosResponse<any>> {
-    return api.get<IAuthResponse>("token/refresh", { withCredentials: true });
-  }
-
-  static async login(data: IUserData): Promise<AxiosResponse<any>> {
-    return api.post<IAuthResponse>("/user/login", data);
+    return http.get<IAuthData>("token/refresh", { withCredentials: true });
   }
 
   static async logout(data: IUserData): Promise<AxiosResponse<any>> {
-    return api.post("/token/logout", data);
+    return http.post("/token/logout", data);
   }
 }

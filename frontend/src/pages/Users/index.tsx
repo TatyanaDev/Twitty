@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { updatePost, deletePost } from "../../store/actions/postActions";
+import { Link, useHistory } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { deletePost, updatePost } from "../../store/actions/postActions";
 import { getUser } from "../../store/actions/userActions";
 import NavigationMenu from "../../components/NavigationMenu";
 import CreatePostForm from "../../components/CreatePostForm";
@@ -9,8 +9,18 @@ import UpdatePostForm from "../../components/UpdatePostForm";
 import { userSelector } from "../../store/selectors";
 import IPostData from "../../types/Post";
 
-export default function Home({ posts }: { posts: IPostData[] }) {
+export default function Users({ posts }: { posts: IPostData[] }) {
   const dispatch = useDispatch();
+  const history = useHistory();
+
+  const logoutUser = () => {
+    // try {
+    //   dispatch(logout_user(userData));
+    //   history.push("/");
+    // } catch (err) {
+    //   console.error(err);
+    // }
+  };
 
   useEffect(() => {
     dispatch(getUser());
@@ -36,17 +46,19 @@ export default function Home({ posts }: { posts: IPostData[] }) {
     }
   };
 
+  const userPosts = posts.filter((post) => post.userId === user.id);
+
   return (
     <section className="d-flex">
-      {user && <NavigationMenu user={user} />}
+      {user && <NavigationMenu />}
       <div>
         <article>
           <CreatePostForm />
         </article>
         <article>
           <ul>
-            {posts.length ? (
-              posts.map((post: IPostData) => (
+            {userPosts.length ? (
+              userPosts.map((post: IPostData) => (
                 <li key={post.id}>
                   {editingPostId === post.id ? (
                     <UpdatePostForm post={post} onSave={handleSaveEdit} onCancel={handleCancelEdit} />
@@ -79,6 +91,7 @@ export default function Home({ posts }: { posts: IPostData[] }) {
             )}
           </ul>
         </article>
+        <button onClick={logoutUser}>Sign out</button>
       </div>
     </section>
   );

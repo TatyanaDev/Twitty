@@ -1,13 +1,9 @@
 import { AxiosResponse } from "axios";
-import IUserData from "../types/User";
-import IPostData from "../types/Post";
-import api from "../http-common";
-export default class UserService {
-  static async getUserData(): Promise<AxiosResponse<any>> {
-    return api.get<IUserData>("/user/data");
-  }
+import { UserResponse } from "../types/User";
+import http from "../api";
 
-  static async getUserPosts(userId: number): Promise<AxiosResponse<any>> {
-    return api.get<IPostData>(`/user/${userId}/post`);
+export default class UserService {
+  static async getUser(): Promise<AxiosResponse<UserResponse>> {
+    return http.get<UserResponse>("/user");
   }
 }

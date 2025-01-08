@@ -1,10 +1,11 @@
 export default interface IUserData {
-  id?: number;
-  firstName?: string;
-  lastName?: string;
-  userName?: string;
+  id: number;
+  firstName: string;
+  lastName: string;
+  userName: string;
   email: string;
-  password?: string;
-  createdAt?: Date;
-  updatedAt?: Date;
+}
+
+export interface UserResponse {
+  data: IUserData;
 }

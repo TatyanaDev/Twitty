@@ -1,34 +1,43 @@
+import { useSelector, useDispatch } from "react-redux";
 import { Switch, Route } from "react-router-dom";
 import { useEffect } from "react";
-import Messages from "./pages/Inner/Messages";
-import Settings from "./pages/Inner/Settings";
-import Comments from "./pages/Inner/Comments";
-import Profile from "./pages/Inner/Profile";
+import { getPosts } from "./store/actions/postActions";
+import { postsSelector } from "./store/selectors";
 import HomeGuest from "./pages/HomeGuest";
-import Users from "./pages/Inner/Users";
-import SignIn from "./pages/SignIn";
-import SignUp from "./pages/SignUp";
+import Messages from "./pages/Messages";
+import Settings from "./pages/Settings";
+import Comments from "./pages/Comments";
+import Register from "./pages/Register";
+import Profile from "./pages/Profile";
+import Users from "./pages/Users";
+import Login from "./pages/Login";
 import Home from "./pages/Home";
 
 export default function App() {
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    checkOnAuth();
+    dispatch(getPosts());
+  }, [dispatch]);
+
+  const { posts } = useSelector(postsSelector);
+
+  const isAuthorized = () => localStorage.getItem("accessToken");
+
+  useEffect(() => {
+    isAuthorized();
   }, []);
 
-  const checkOnAuth = () => localStorage.getItem("token");
-
   return (
-    <section>
-      <Switch>
-        <Route exact path="/" render={() => (checkOnAuth() ? <Home /> : <HomeGuest />)} />
-        <Route exact path="/messages" render={() => <Messages />} />
-        <Route exact path="/settings" render={() => <Settings />} />
-        <Route exact path="/profile" render={() => <Profile />} />
-        <Route exact path="/register" render={() => <SignUp />} />
-        <Route exact path="/login" render={() => <SignIn />} />
-        <Route exact path="/posts/:id" render={() => <Comments />} />
-        <Route exact path="/:userName" render={() => <Users />} />
-      </Switch>
-    </section>
+    <Switch>
+      <Route exact path="/" render={() => (isAuthorized() ? <Home posts={posts} /> : <HomeGuest posts={posts} />)} />
+      <Route exact path="/register" render={() => <Register />} />
+      <Route exact path="/login" render={() => <Login />} />
+      <Route exact path="/messages" render={() => <Messages />} />
+      <Route exact path="/settings" render={() => <Settings />} />
+      <Route exact path="/profile" render={() => <Profile />} />
+      <Route exact path="/posts/:id" render={() => <Comments posts={posts} />} />
+      <Route exact path="/:userName" render={() => <Users posts={posts} />} />
+    </Switch>
   );
 }

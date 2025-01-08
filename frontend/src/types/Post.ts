@@ -1,7 +1,16 @@
 export default interface IPostData {
-  id?: any | null;
-  userId?: number | null;
-  content?: string;
-  createdAt?: Date;
-  updatedAt?: Date;
+  id: number;
+  userId: number;
+  content: string;
+  createdAt: Date;
+  updatedAt: Date;
+  user: {
+    firstName: string;
+    lastName: string;
+    userName: string;
+  };
+}
+
+export interface PostsResponse {
+  data: IPostData[];
 }

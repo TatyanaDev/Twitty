@@ -1,8 +1,17 @@
 export default interface ICommentData {
-  id?: any | null;
-  userId?: number | null;
-  postId?: number | null;
-  contents: string;
-  createdAt?: Date;
-  updatedAt?: Date;
+  id: number;
+  userId: number;
+  postId: number;
+  content: string;
+  createdAt: Date;
+  updatedAt: Date;
+  user: {
+    firstName: string;
+    lastName: string;
+    userName: string;
+  };
+}
+
+export interface CommentsResponse {
+  data: ICommentData[];
 }

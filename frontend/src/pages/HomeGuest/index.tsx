@@ -1,29 +1,10 @@
-import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { useEffect } from "react";
-import { getPostsSelector } from "../../store/selectors";
-import { get_posts } from "../../store/actions/post";
-import ACTION_TYPES from "../../store/types";
+import IPostData from "../../types/Post";
 
-export default function HomeGuest() {
-  const posts = useSelector(getPostsSelector).posts;
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    getPosts();
-  }, []);
-
-  const getPosts = () => {
-    try {
-      dispatch(get_posts());
-    } catch (err) {
-      dispatch({ type: ACTION_TYPES.GET_POSTS_ERROR });
-    }
-  };
-
+export default function HomeGuest({ posts }: { posts: IPostData[] }) {
   return (
     <section>
-      <div className="container">
+      <div className="d-flex">
         <article>
           <nav>
             <ul>
@@ -36,10 +17,15 @@ export default function HomeGuest() {
         <article>
           <ul>
             {posts.length ? (
-              posts.map((post: any) => (
+              posts.map((post) => (
                 <li key={post.id}>
                   <h1>
-                    {post.User.firstName} {post.User.lastName} @{post.User.userName} · {new Date(post.updatedAt).toLocaleString("arabext", { day: "numeric", month: "short", year: "numeric" })}
+                    {post.user.firstName}&nbsp;{post.user.lastName}&nbsp;@{post.user.userName}&nbsp;·&nbsp;
+                    {new Date(post.createdAt).toLocaleString("en-GB", {
+                      day: "numeric",
+                      month: "short",
+                      year: "numeric",
+                    })}
                   </h1>
                   <p>{post.content}</p>
                 </li>
@@ -52,7 +38,7 @@ export default function HomeGuest() {
       </div>
       <footer>
         <nav>
-          <ul className="container">
+          <ul className="d-flex">
             <li>
               <Link to="/login">Sign in</Link>
             </li>

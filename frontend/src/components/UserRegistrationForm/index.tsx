@@ -1,44 +1,82 @@
+import { Form, Field, FormikErrors, FormikTouched } from "formik";
 import { Link } from "react-router-dom";
-import { Form, Field } from "formik";
-import style from "./styles.module.css";
 
-export default function UserRegistrationForm({ errors, touched }: any) {
+export interface UserRegistrationFormValues {
+  firstName: string;
+  lastName: string;
+  userName: string;
+  email: string;
+  password: string;
+  passwordConfirmation: string;
+}
+
+interface UserRegistrationFormProps {
+  errors: FormikErrors<UserRegistrationFormValues>;
+  touched: FormikTouched<UserRegistrationFormValues>;
+}
+
+export default function UserRegistrationForm({ errors, touched }: UserRegistrationFormProps) {
   return (
     <Form>
-      <label className={style.label}>First name </label>
-      <Field name="firstName" />
-      {errors.firstName && touched.firstName && <p>{errors.firstName}</p>}
+      <div>
+        <label htmlFor="firstName" className="d-block">
+          First name
+        </label>
+        <Field name="firstName" id="firstName" />
+        {errors.firstName && touched.firstName && <p className="color-red">{errors.firstName}</p>}
+      </div>
 
-      <label className={style.label}>Last name</label>
-      <Field name="lastName" />
-      {errors.lastName && touched.lastName && <p>{errors.lastName}</p>}
+      <div>
+        <label htmlFor="lastName" className="d-block">
+          Last name
+        </label>
+        <Field name="lastName" id="lastName" />
+        {errors.lastName && touched.lastName && <p className="color-red">{errors.lastName}</p>}
+      </div>
 
-      <label className={style.label}>User name </label>
-      <Field name="userName" />
-      {errors.userName && touched.userName && <p>{errors.userName}</p>}
+      <div>
+        <label htmlFor="userName" className="d-block">
+          User name
+        </label>
+        <Field name="userName" id="userName" />
+        {errors.userName && touched.userName && <p className="color-red">{errors.userName}</p>}
+      </div>
 
-      <label className={style.label}>Email </label>
-      <Field name="email" />
-      {errors.email && touched.email && <p>{errors.email}</p>}
+      <div>
+        <label htmlFor="email" className="d-block">
+          Email
+        </label>
+        <Field name="email" id="email" />
+        {errors.email && touched.email && <p className="color-red">{errors.email}</p>}
+      </div>
 
-      <label className={style.label}>Password </label>
-      <Field name="password" />
-      {errors.password && touched.password && <p>{errors.password}</p>}
+      <div>
+        <label htmlFor="password" className="d-block">
+          Password
+        </label>
+        <Field name="password" id="password" />
+        {errors.password && touched.password && <p className="color-red">{errors.password}</p>}
+      </div>
 
-      <label className={style.label}>Password confirmation </label>
-      <Field name="passwordConfirmation" />
-      {errors.passwordConfirmation && touched.passwordConfirmation && <p>{errors.passwordConfirmation}</p>}
+      <div>
+        <label htmlFor="passwordConfirmation" className="d-block">
+          Password confirmation
+        </label>
+        <Field name="passwordConfirmation" id="passwordConfirmation" />
+        {errors.passwordConfirmation && touched.passwordConfirmation && <p className="color-red">{errors.passwordConfirmation}</p>}
+      </div>
 
-      <nav>
-        <ul>
-          <li>
-            <button type="submit">Sign up</button>
-          </li>
-          <li>
-            <Link to="/login">Sign in</Link>
-          </li>
-        </ul>
-      </nav>
+      <div>
+        <button type="submit">Sign up</button>
+
+        <nav>
+          <ul>
+            <li>
+              <Link to="/login">Sign in</Link>
+            </li>
+          </ul>
+        </nav>
+      </div>
     </Form>
   );
 }
