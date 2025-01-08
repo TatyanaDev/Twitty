@@ -1,8 +1,13 @@
 import { Link } from "react-router-dom";
+import { IUserData } from "../../types/User";
 
-export default function NavigationMenu({ user }: any) {
+interface NavigationMenuProps {
+  user: IUserData;
+}
+
+export default function NavigationMenu({ user }: NavigationMenuProps) {
   return (
-    <article>
+    <aside>
       <nav>
         <ul>
           <li>
@@ -12,7 +17,7 @@ export default function NavigationMenu({ user }: any) {
             <Link to="/messages">Messages</Link>
           </li>
           <li>
-            <Link to={`/${user?.userName}`}>Users</Link>
+            <Link to={`/${user.userName}`}>Users</Link>
           </li>
           <li>
             <Link to="/profile">Profile</Link>
@@ -22,6 +27,6 @@ export default function NavigationMenu({ user }: any) {
           </li>
         </ul>
       </nav>
-    </article>
+    </aside>
   );
 }

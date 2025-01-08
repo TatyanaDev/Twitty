@@ -1,38 +1,40 @@
+import { Formik, Form, Field, FormikHelpers } from "formik";
 import { useDispatch, useSelector } from "react-redux";
-import { Formik, Form, Field } from "formik";
-import * as Yup from "yup";
+import { POST_CONTENT_VALIDATION_SCHEMA } from "../../utils/validationSchemas";
 import { createPost } from "../../store/actions/postActions";
 import { userSelector } from "../../store/selectors";
+import { PostContent } from "../../types/Post";
 
 export default function CreatePostForm() {
   const { user } = useSelector(userSelector);
 
   const dispatch = useDispatch();
 
-  const initialValues = {
+  const initialValues: PostContent = {
     content: "",
   };
 
-  const validationSchema = Yup.object().shape({
-    content: Yup.string().trim().required("Content is required"),
-  });
-
-  const handleSubmit = (values: { content: string }, formikBag: any) => {
+  const handleSubmit = ({ content }: PostContent, formikBag: FormikHelpers<PostContent>) => {
     if (user) {
-      dispatch(createPost(user.id, values.content));
+      dispatch(createPost(user.id, content));
+
       formikBag.resetForm();
     }
   };
 
   return (
-    <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
+    <Formik initialValues={initialValues} validationSchema={POST_CONTENT_VALIDATION_SCHEMA} onSubmit={handleSubmit}>
       {({ errors, touched }) => (
         <Form>
           <div>
-            <Field name="content" as="textarea" placeholder="What's up?" />
-          </div>
+            <Field name="content" as="textarea" placeholder="What's up?" aria-label="Post content" aria-invalid={touched.content && !!errors.content} aria-describedby="contentError" />
 
-          {errors.content && touched.content && <p className="color-red">{errors.content}</p>}
+            {errors.content && touched.content && (
+              <p id="contentError" className="color-red">
+                {errors.content}
+              </p>
+            )}
+          </div>
 
           <button type="submit">Tweet</button>
         </Form>

@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { getUser } from "../../store/actions/userActions";
 import NavigationMenu from "../../components/NavigationMenu";
+import { getUser } from "../../store/actions/userActions";
 import { userSelector } from "../../store/selectors";
 
 export default function Profile() {
@@ -15,7 +15,7 @@ export default function Profile() {
 
   return (
     <section className="d-flex">
-      {user && <NavigationMenu />}
+      {user && <NavigationMenu user={user} />}
       <p>Profile</p>
     </section>
   );

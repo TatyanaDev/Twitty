@@ -1,5 +1,5 @@
 import { AxiosResponse } from "axios";
-import IPostData, { PostsResponse } from "../types/Post";
+import { PostContent, PostsResponse, PostResponse, PostIdResponse } from "../types/Post";
 import http from "../api";
 
 export default class PostService {
@@ -7,15 +7,15 @@ export default class PostService {
     return http.get<PostsResponse>("/post");
   }
 
-  static async createPost(userId: number, post: { content: string }): Promise<AxiosResponse<any>> {
-    return http.post<IPostData>(`/user/${userId}/post`, post);
+  static async createPost(userId: number, post: PostContent): Promise<AxiosResponse<PostResponse>> {
+    return http.post<PostResponse>(`/user/${userId}/post`, post);
   }
 
-  static async updatePost(userId: number, postId: number, post: { content: string }): Promise<AxiosResponse<any>> {
-    return http.patch<IPostData>(`/user/${userId}/post/${postId}`, post);
+  static async updatePost(userId: number, postId: number, post: PostContent): Promise<AxiosResponse<PostResponse>> {
+    return http.patch<PostResponse>(`/user/${userId}/post/${postId}`, post);
   }
 
-  static async deletePost(userId: number, postId: number): Promise<AxiosResponse<any>> {
-    return http.delete<IPostData>(`/user/${userId}/post/${postId}`);
+  static async deletePost(userId: number, postId: number): Promise<AxiosResponse<PostIdResponse>> {
+    return http.delete<PostIdResponse>(`/user/${userId}/post/${postId}`);
   }
 }

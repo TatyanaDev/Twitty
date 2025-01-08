@@ -1,7 +1,9 @@
-import { Dispatch } from "redux";
+import { ThunkDispatch } from "redux-thunk";
+import { AnyAction, Dispatch } from "redux";
 import { UserRegistrationFormValues } from "../../components/UserRegistrationForm";
 import { UserLoginFormValues } from "../../components/UserLoginForm";
 import UserService from "../../services/user.service";
+import { RootState } from "../../types/state";
 import ACTION_TYPES from "./actionTypes";
 
 export const getUser = () => async (dispatch: Dispatch) => {
@@ -18,12 +20,11 @@ export const getUser = () => async (dispatch: Dispatch) => {
   }
 };
 
-export const registerUser = (user: UserRegistrationFormValues) => async (dispatch: Dispatch) => {
+export const registerUser = (user: UserRegistrationFormValues) => async (dispatch: ThunkDispatch<RootState, unknown, AnyAction>) => {
   dispatch({ type: ACTION_TYPES.REGISTER_USER_REQUEST });
 
   try {
     const { data } = await UserService.registerUser(user);
-
     const { accessToken, refreshToken } = data.data;
 
     localStorage.setItem("accessToken", accessToken);
@@ -31,17 +32,17 @@ export const registerUser = (user: UserRegistrationFormValues) => async (dispatc
 
     dispatch({ type: ACTION_TYPES.REGISTER_USER_SUCCESS });
 
-    await dispatch<any>(getUser());
+    await dispatch(getUser());
   } catch (err: any) {
     const error = err.response?.data?.error?.message || "An unknown error occurred";
 
     dispatch({ type: ACTION_TYPES.REGISTER_USER_ERROR, error });
 
-    throw error;
+    throw err;
   }
 };
 
-export const loginUser = (user: UserLoginFormValues) => async (dispatch: Dispatch) => {
+export const loginUser = (user: UserLoginFormValues) => async (dispatch: ThunkDispatch<RootState, unknown, AnyAction>) => {
   dispatch({ type: ACTION_TYPES.LOGIN_USER_REQUEST });
 
   try {
@@ -54,7 +55,7 @@ export const loginUser = (user: UserLoginFormValues) => async (dispatch: Dispatc
 
     dispatch({ type: ACTION_TYPES.LOGIN_USER_SUCCESS });
 
-    await dispatch<any>(getUser());
+    await dispatch(getUser());
   } catch (err: any) {
     const error = err.response?.data?.error?.message || "An unknown error occurred";
 

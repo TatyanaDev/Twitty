@@ -1,8 +1,11 @@
-export default interface ICommentData {
+export interface CommentContent {
+  content: string;
+}
+
+export interface ICommentData extends CommentContent {
   id: number;
   userId: number;
   postId: number;
-  content: string;
   createdAt: Date;
   updatedAt: Date;
   user: {
@@ -14,4 +17,12 @@ export default interface ICommentData {
 
 export interface CommentsResponse {
   data: ICommentData[];
+}
+
+export interface CommentResponse {
+  data: ICommentData;
+}
+
+export interface CommentIdResponse {
+  data: { commentId: string };
 }

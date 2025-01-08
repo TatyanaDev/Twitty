@@ -1,39 +1,44 @@
+import { Formik, Form, Field, FormikHelpers } from "formik";
 import { useDispatch, useSelector } from "react-redux";
-import { Formik, Form, Field } from "formik";
-import * as Yup from "yup";
+import { COMMENT_CONTENT_VALIDATION_SCHEMA } from "../../utils/validationSchemas";
 import { createComment } from "../../store/actions/commentActions";
 import { userSelector } from "../../store/selectors";
+import { CommentContent } from "../../types/Comment";
 
-export default function CreateCommentForm({ postId }: { postId: number }) {
+interface CreateCommentFormProps {
+  postId: number;
+}
+
+export default function CreateCommentForm({ postId }: CreateCommentFormProps) {
   const { user } = useSelector(userSelector);
 
   const dispatch = useDispatch();
 
-  const initialValues = {
+  const initialValues: CommentContent = {
     content: "",
   };
 
-  const validationSchema = Yup.object().shape({
-    content: Yup.string().trim().required("Content is required"),
-  });
-
-  const handleSubmit = (values: { content: string }, formikBag: any) => {
+  const handleSubmit = ({ content }: CommentContent, formikBag: FormikHelpers<CommentContent>) => {
     if (user) {
-      dispatch(createComment(user.id, postId, values.content));
+      dispatch(createComment(user.id, postId, content));
 
       formikBag.resetForm();
     }
   };
 
   return (
-    <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
+    <Formik initialValues={initialValues} validationSchema={COMMENT_CONTENT_VALIDATION_SCHEMA} onSubmit={handleSubmit}>
       {({ errors, touched }) => (
         <Form>
           <div>
-            <Field name="content" as="textarea" placeholder="What's up?" />
-          </div>
+            <Field name="content" as="textarea" placeholder="What's up?" aria-label="Comment content" aria-invalid={touched.content && !!errors.content} aria-describedby="contentError" />
 
-          {errors.content && touched.content && <p className="color-red">{errors.content}</p>}
+            {errors.content && touched.content && (
+              <p id="contentError" className="color-red">
+                {errors.content}
+              </p>
+            )}
+          </div>
 
           <button type="submit">Comment</button>
         </Form>

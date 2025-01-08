@@ -1,17 +1,29 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { deletePost, updatePost } from "../../store/actions/postActions";
+import { deletePost } from "../../store/actions/postActions";
 import NavigationMenu from "../../components/NavigationMenu";
 import CreatePostForm from "../../components/CreatePostForm";
 import UpdatePostForm from "../../components/UpdatePostForm";
 import { getUser } from "../../store/actions/userActions";
 import { userSelector } from "../../store/selectors";
-import IPostData from "../../types/Post";
+import { IPostData } from "../../types/Post";
 
-export default function Users({ posts }: { posts: IPostData[] }) {
+interface UsersProps {
+  posts: IPostData[];
+}
+
+export default function Users({ posts }: UsersProps) {
+  const [editingPostId, setEditingPostId] = useState<number | null>(null);
+
+  const { user } = useSelector(userSelector);
+
   const dispatch = useDispatch();
   const history = useHistory();
+
+  useEffect(() => {
+    dispatch(getUser());
+  }, [dispatch]);
 
   const logoutUser = () => {
     // try {
@@ -22,35 +34,11 @@ export default function Users({ posts }: { posts: IPostData[] }) {
     // }
   };
 
-  useEffect(() => {
-    dispatch(getUser());
-  }, [dispatch]);
-
-  const { user } = useSelector(userSelector);
-
-  const handleDeletePost = (userId: number, postId: number) => dispatch(deletePost(userId, postId));
-
-  const [editingPostId, setEditingPostId] = useState<number | null>(null);
-
-  const setEditingPost = (postId: number) => setEditingPostId(postId);
-
-  const handleCancelEdit = () => setEditingPostId(null);
-
-  const handleSaveEdit = (updatedPost: { content: string }) => {
-    if (user && editingPostId !== null) {
-      const { content } = updatedPost;
-
-      dispatch(updatePost(user.id, editingPostId, content));
-
-      setEditingPostId(null);
-    }
-  };
-
-  const userPosts = posts.filter((post) => post.userId === user.id);
+  const userPosts = posts.filter(({ userId }) => userId === user.id);
 
   return (
     <section className="d-flex">
-      {user && <NavigationMenu />}
+      {user && <NavigationMenu user={user} />}
       <div>
         <article>
           <CreatePostForm />
@@ -61,7 +49,7 @@ export default function Users({ posts }: { posts: IPostData[] }) {
               userPosts.map((post: IPostData) => (
                 <li key={post.id}>
                   {editingPostId === post.id ? (
-                    <UpdatePostForm post={post} onSave={handleSaveEdit} onCancel={handleCancelEdit} />
+                    <UpdatePostForm post={post} setEditingPostId={setEditingPostId} />
                   ) : (
                     <>
                       <h1>
@@ -74,10 +62,10 @@ export default function Users({ posts }: { posts: IPostData[] }) {
                           })}
                         </Link>
 
-                        {post.userId === user.id && (
+                        {post.userId === user?.id && (
                           <>
-                            <button onClick={() => setEditingPost(post.id)}>Edit</button>
-                            <button onClick={() => handleDeletePost(user.id, post.id)}>Delete</button>
+                            <button onClick={() => setEditingPostId(post.id)}>Edit</button>
+                            <button onClick={() => dispatch(deletePost(user.id, post.id))}>Delete</button>
                           </>
                         )}
                       </h1>

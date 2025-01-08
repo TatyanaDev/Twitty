@@ -1,40 +1,28 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { updatePost, deletePost } from "../../store/actions/postActions";
+import { deletePost } from "../../store/actions/postActions";
 import NavigationMenu from "../../components/NavigationMenu";
 import CreatePostForm from "../../components/CreatePostForm";
 import UpdatePostForm from "../../components/UpdatePostForm";
 import { getUser } from "../../store/actions/userActions";
 import { userSelector } from "../../store/selectors";
-import IPostData from "../../types/Post";
+import { IPostData } from "../../types/Post";
 
-export default function Home({ posts }: { posts: IPostData[] }) {
+interface HomeProps {
+  posts: IPostData[];
+}
+
+export default function Home({ posts }: HomeProps) {
+  const [editingPostId, setEditingPostId] = useState<number | null>(null);
+
+  const { user } = useSelector(userSelector);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getUser());
   }, [dispatch]);
-
-  const { user } = useSelector(userSelector);
-
-  const handleDeletePost = (userId: number, postId: number) => dispatch(deletePost(userId, postId));
-
-  const [editingPostId, setEditingPostId] = useState<number | null>(null);
-
-  const setEditingPost = (postId: number) => setEditingPostId(postId);
-
-  const handleCancelEdit = () => setEditingPostId(null);
-
-  const handleSaveEdit = (updatedPost: { content: string }) => {
-    if (user && editingPostId !== null) {
-      const { content } = updatedPost;
-
-      dispatch(updatePost(user.id, editingPostId, content));
-
-      setEditingPostId(null);
-    }
-  };
 
   return (
     <section className="d-flex">
@@ -49,7 +37,7 @@ export default function Home({ posts }: { posts: IPostData[] }) {
               posts.map((post: IPostData) => (
                 <li key={post.id}>
                   {editingPostId === post.id ? (
-                    <UpdatePostForm post={post} onSave={handleSaveEdit} onCancel={handleCancelEdit} />
+                    <UpdatePostForm post={post} setEditingPostId={setEditingPostId} />
                   ) : (
                     <>
                       <h1>
@@ -62,10 +50,10 @@ export default function Home({ posts }: { posts: IPostData[] }) {
                           })}
                         </Link>
 
-                        {post.userId === user.id && (
+                        {post.userId === user?.id && (
                           <>
-                            <button onClick={() => setEditingPost(post.id)}>Edit</button>
-                            <button onClick={() => handleDeletePost(user.id, post.id)}>Delete</button>
+                            <button onClick={() => setEditingPostId(post.id)}>Edit</button>
+                            <button onClick={() => dispatch(deletePost(user.id, post.id))}>Delete</button>
                           </>
                         )}
                       </h1>

@@ -1,5 +1,5 @@
+import { ICommentData } from "../../types/Comment";
 import ACTION_TYPES from "../actions/actionTypes";
-import ICommentData from "../../types/Comment";
 
 interface GetCommentsRequestAction {
   type: typeof ACTION_TYPES.GET_COMMENTS_REQUEST;

@@ -1,74 +1,61 @@
 import { useHistory, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
-import { getComments, updateComment, deleteComment } from "../../store/actions/commentActions";
-import { deletePost, updatePost } from "../../store/actions/postActions";
+import { getComments, deleteComment } from "../../store/actions/commentActions";
 import { commentsSelector, userSelector } from "../../store/selectors";
 import CreateCommentForm from "../../components/CreateCommentForm";
 import UpdateCommentForm from "../../components/UpdateCommentForm";
 import NavigationMenu from "../../components/NavigationMenu";
+import { deletePost } from "../../store/actions/postActions";
 import UpdatePostForm from "../../components/UpdatePostForm";
 import { getUser } from "../../store/actions/userActions";
-import ICommentData from "../../types/Comment";
-import IPostData from "../../types/Post";
+import { ICommentData } from "../../types/Comment";
+import { IPostData } from "../../types/Post";
 
-export default function Comments({ posts }: { posts: IPostData[] }) {
-  const params = useParams<any>();
-  const history = useHistory();
+interface CommentsProps {
+  posts: IPostData[];
+}
 
-  const dispatch = useDispatch();
+interface RouteParams {
+  id: string;
+}
+
+export default function Comments({ posts }: CommentsProps) {
+  const [editingPostId, setEditingPostId] = useState<number | null>(null);
+  const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
 
   const { user } = useSelector(userSelector);
   const { comments } = useSelector(commentsSelector);
 
+  const dispatch = useDispatch();
+  const history = useHistory();
+
+  const { id: postId } = useParams<RouteParams>();
+
   useEffect(() => {
     dispatch(getUser());
-    dispatch(getComments(user?.id, params.id));
-  }, [dispatch, user?.id, params.id]);
-
-  const currentPost = posts.filter((post) => post.id === parseInt(params.id))[0];
-
-  const [editingPostId, setEditingPostId] = useState<number | null>(null);
-  const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
-
-  const handleCancelEditPost = () => setEditingPostId(null);
-  const handleCancelEditComment = () => setEditingCommentId(null);
-
-  const handleSaveEditPost = (updatedPost: { content: string }) => {
-    if (user && editingPostId !== null) {
-      const { content } = updatedPost;
-
-      dispatch(updatePost(user.id, editingPostId, content));
-
-      handleCancelEditPost();
-    }
-  };
-
-  const handleSaveEditComment = (updatedComment: { content: string }) => {
-    if (user && params.id !== null && editingCommentId !== null) {
-      const { content } = updatedComment;
-
-      dispatch(updateComment(user.id, params.id, editingCommentId, content));
-
-      handleCancelEditComment();
-    }
-  };
+    dispatch(getComments(user?.id, postId));
+  }, [dispatch, user?.id, postId]);
 
   const handleDeletePost = async (userId: number, postId: number) => {
-    await dispatch(deletePost(userId, postId));
+    try {
+      await dispatch(deletePost(userId, postId));
 
-    history.push(`/${user.userName}`);
+      history.push(`/${user.userName}`);
+    } catch (error) {
+      console.error("Error deleting post:", error);
+    }
   };
 
-  const handleDeleteComment = async (userId: number, postId: number, commentId: number) => dispatch(deleteComment(userId, postId, commentId));
+  const currentPost = posts.filter(({ id }) => id === parseInt(postId))[0];
 
   return (
     <section className="d-flex">
-      {user && <NavigationMenu />}
+      {user && <NavigationMenu user={user} />}
       <div>
         <article>
           {editingPostId === currentPost?.id ? (
-            <UpdatePostForm post={currentPost} onSave={handleSaveEditPost} onCancel={handleCancelEditPost} />
+            <UpdatePostForm post={currentPost} setEditingPostId={setEditingPostId} />
           ) : (
             <>
               <h1>
@@ -99,7 +86,7 @@ export default function Comments({ posts }: { posts: IPostData[] }) {
               comments.map((comment: ICommentData) => (
                 <li key={comment.id}>
                   {editingCommentId === comment.id ? (
-                    <UpdateCommentForm comment={comment} onSave={handleSaveEditComment} onCancel={handleCancelEditComment} />
+                    <UpdateCommentForm comment={comment} setEditingCommentId={setEditingCommentId} />
                   ) : (
                     <>
                       <h1>
@@ -115,7 +102,7 @@ export default function Comments({ posts }: { posts: IPostData[] }) {
                       {comment.userId === user.id && (
                         <>
                           <button onClick={() => setEditingCommentId(comment.id)}>Edit</button>
-                          <button onClick={() => handleDeleteComment(user.id, params.id, comment.id)}>Delete</button>
+                          <button onClick={() => dispatch(deleteComment(user.id, postId, comment.id))}>Delete</button>
                         </>
                       )}
                     </>

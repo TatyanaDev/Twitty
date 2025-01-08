@@ -1,4 +1,4 @@
-export default interface IAuthData {
+interface IAuthData {
   accessToken: string;
   refreshToken: string;
 }

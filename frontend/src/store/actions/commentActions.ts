@@ -2,7 +2,7 @@ import { Dispatch } from "redux";
 import CommentService from "../../services/comment.service";
 import ACTION_TYPES from "./actionTypes";
 
-export const getComments = (userId: number, postId: number) => async (dispatch: Dispatch) => {
+export const getComments = (userId: number, postId: string) => async (dispatch: Dispatch) => {
   dispatch({ type: ACTION_TYPES.GET_COMMENTS_REQUEST });
 
   try {
@@ -38,7 +38,7 @@ export const updateComment = (userId: number, postId: number, commentId: number,
   }
 };
 
-export const deleteComment = (userId: number, postId: number, commentId: number) => async (dispatch: Dispatch) => {
+export const deleteComment = (userId: number, postId: string, commentId: number) => async (dispatch: Dispatch) => {
   dispatch({ type: ACTION_TYPES.DELETE_COMMENT_REQUEST });
 
   try {

@@ -1,6 +1,6 @@
-import ICommentData from "./Comment";
-import IPostData from "./Post";
-import IUserData from "./User";
+import { ICommentData } from "./Comment";
+import { IPostData } from "./Post";
+import { IUserData } from "./User";
 
 interface BaseState {
   isFetching: boolean;

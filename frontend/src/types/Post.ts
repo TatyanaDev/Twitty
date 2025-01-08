@@ -1,7 +1,10 @@
-export default interface IPostData {
+export interface PostContent {
+  content: string;
+}
+
+export interface IPostData extends PostContent {
   id: number;
   userId: number;
-  content: string;
   createdAt: Date;
   updatedAt: Date;
   user: {
@@ -13,4 +16,12 @@ export default interface IPostData {
 
 export interface PostsResponse {
   data: IPostData[];
+}
+
+export interface PostResponse {
+  data: IPostData;
+}
+
+export interface PostIdResponse {
+  data: { postId: string };
 }

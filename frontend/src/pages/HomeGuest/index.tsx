@@ -1,7 +1,11 @@
 import { Link } from "react-router-dom";
-import IPostData from "../../types/Post";
+import { IPostData } from "../../types/Post";
 
-export default function HomeGuest({ posts }: { posts: IPostData[] }) {
+interface HomeGuestProps {
+  posts: IPostData[];
+}
+
+export default function HomeGuest({ posts }: HomeGuestProps) {
   return (
     <section>
       <div className="d-flex">
