@@ -49,3 +49,5 @@ export const deleteComment = (userId: number, postId: string, commentId: number)
     dispatch({ type: ACTION_TYPES.DELETE_COMMENT_ERROR, error });
   }
 };
+
+export const clearComments = () => (dispatch: Dispatch) => dispatch({ type: ACTION_TYPES.CLEAR_COMMENTS });

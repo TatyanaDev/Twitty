@@ -57,7 +57,11 @@ interface DeleteCommentErrorAction {
   error: string;
 }
 
-type CommentActions = GetCommentsRequestAction | GetCommentsSuccessAction | GetCommentsErrorAction | CreateCommentRequestAction | CreateCommentSuccessAction | CreateCommentErrorAction | UpdateCommentRequestAction | UpdateCommentSuccessAction | UpdateCommentErrorAction | DeleteCommentRequestAction | DeleteCommentSuccessAction | DeleteCommentErrorAction;
+interface ClearCommentsAction {
+  type: typeof ACTION_TYPES.CLEAR_COMMENTS;
+}
+
+type CommentActions = GetCommentsRequestAction | GetCommentsSuccessAction | GetCommentsErrorAction | CreateCommentRequestAction | CreateCommentSuccessAction | CreateCommentErrorAction | UpdateCommentRequestAction | UpdateCommentSuccessAction | UpdateCommentErrorAction | DeleteCommentRequestAction | DeleteCommentSuccessAction | DeleteCommentErrorAction | ClearCommentsAction;
 
 const initialState = {
   comments: [],
@@ -108,6 +112,11 @@ const commentReducer = (state = initialState, action: CommentActions) => {
         ...state,
         isFetching: false,
         error: action.error,
+      };
+    case ACTION_TYPES.CLEAR_COMMENTS:
+      return {
+        ...state,
+        comments: [],
       };
     default:
       return state;

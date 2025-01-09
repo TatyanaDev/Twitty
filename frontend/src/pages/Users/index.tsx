@@ -7,6 +7,7 @@ import NavigationMenu from "../../components/NavigationMenu";
 import CreatePostForm from "../../components/CreatePostForm";
 import UpdatePostForm from "../../components/UpdatePostForm";
 import { getUser } from "../../store/actions/userActions";
+import { formatDate } from "../../utils/formatDate";
 import { IPostData } from "../../types/Post";
 
 export default function Users() {
@@ -51,12 +52,7 @@ export default function Users() {
                     <>
                       <h1>
                         <Link to={`/posts/${post.id}`}>
-                          {post.user?.firstName || user.firstName}&nbsp;{post.user?.lastName || user.lastName}&nbsp;@{post.user?.userName || user.userName}&nbsp;·&nbsp;
-                          {new Date(post.createdAt).toLocaleString("en-GB", {
-                            day: "numeric",
-                            month: "short",
-                            year: "numeric",
-                          })}
+                          {post.user?.firstName || user.firstName}&nbsp;{post.user?.lastName || user.lastName}&nbsp;@{post.user?.userName || user.userName}&nbsp;·&nbsp;{formatDate(post.createdAt)}
                         </Link>
 
                         {post.userId === user?.id && (

@@ -1,6 +1,7 @@
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { postsSelector } from "../../store/selectors";
+import { formatDate } from "../../utils/formatDate";
 
 export default function HomeGuest() {
   const { posts } = useSelector(postsSelector);
@@ -23,12 +24,7 @@ export default function HomeGuest() {
               posts.map((post) => (
                 <li key={post.id}>
                   <h1>
-                    {post.user.firstName}&nbsp;{post.user.lastName}&nbsp;@{post.user.userName}&nbsp;·&nbsp;
-                    {new Date(post.createdAt).toLocaleString("en-GB", {
-                      day: "numeric",
-                      month: "short",
-                      year: "numeric",
-                    })}
+                    {post.user.firstName}&nbsp;{post.user.lastName}&nbsp;@{post.user.userName}&nbsp;·&nbsp;{formatDate(post.createdAt)}
                   </h1>
                   <p>{post.content}</p>
                 </li>
