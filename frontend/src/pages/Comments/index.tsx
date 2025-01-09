@@ -1,8 +1,8 @@
 import { useHistory, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
+import { userSelector, postsSelector, commentsSelector } from "../../store/selectors";
 import { getComments, deleteComment } from "../../store/actions/commentActions";
-import { commentsSelector, userSelector } from "../../store/selectors";
 import CreateCommentForm from "../../components/CreateCommentForm";
 import UpdateCommentForm from "../../components/UpdateCommentForm";
 import NavigationMenu from "../../components/NavigationMenu";
@@ -10,22 +10,18 @@ import { deletePost } from "../../store/actions/postActions";
 import UpdatePostForm from "../../components/UpdatePostForm";
 import { getUser } from "../../store/actions/userActions";
 import { ICommentData } from "../../types/Comment";
-import { IPostData } from "../../types/Post";
-
-interface CommentsProps {
-  posts: IPostData[];
-}
 
 interface RouteParams {
   id: string;
 }
 
-export default function Comments({ posts }: CommentsProps) {
-  const [editingPostId, setEditingPostId] = useState<number | null>(null);
+export default function Comments() {
   const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
+  const [editingPostId, setEditingPostId] = useState<number | null>(null);
 
-  const { user } = useSelector(userSelector);
   const { comments } = useSelector(commentsSelector);
+  const { posts } = useSelector(postsSelector);
+  const { user } = useSelector(userSelector);
 
   const dispatch = useDispatch();
   const history = useHistory();

@@ -1,8 +1,7 @@
-import { useSelector, useDispatch } from "react-redux";
 import { Switch, Route } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { getPosts } from "./store/actions/postActions";
-import { postsSelector } from "./store/selectors";
 import HomeGuest from "./pages/HomeGuest";
 import Messages from "./pages/Messages";
 import Settings from "./pages/Settings";
@@ -20,8 +19,6 @@ export default function App() {
     dispatch(getPosts());
   }, [dispatch]);
 
-  const { posts } = useSelector(postsSelector);
-
   const isAuthorized = () => localStorage.getItem("accessToken");
 
   useEffect(() => {
@@ -30,14 +27,14 @@ export default function App() {
 
   return (
     <Switch>
-      <Route exact path="/" render={() => (isAuthorized() ? <Home posts={posts} /> : <HomeGuest posts={posts} />)} />
+      <Route exact path="/" render={() => (isAuthorized() ? <Home /> : <HomeGuest />)} />
       <Route exact path="/register" render={() => <Register />} />
       <Route exact path="/login" render={() => <Login />} />
       <Route exact path="/messages" render={() => <Messages />} />
       <Route exact path="/settings" render={() => <Settings />} />
       <Route exact path="/profile" render={() => <Profile />} />
-      <Route exact path="/posts/:id" render={() => <Comments posts={posts} />} />
-      <Route exact path="/:userName" render={() => <Users posts={posts} />} />
+      <Route exact path="/posts/:id" render={() => <Comments />} />
+      <Route exact path="/:userName" render={() => <Users />} />
     </Switch>
   );
 }

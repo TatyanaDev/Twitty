@@ -1,11 +1,10 @@
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { IPostData } from "../../types/Post";
+import { postsSelector } from "../../store/selectors";
 
-interface HomeGuestProps {
-  posts: IPostData[];
-}
+export default function HomeGuest() {
+  const { posts } = useSelector(postsSelector);
 
-export default function HomeGuest({ posts }: HomeGuestProps) {
   return (
     <section>
       <div className="d-flex">

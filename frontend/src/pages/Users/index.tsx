@@ -1,21 +1,18 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { userSelector, postsSelector } from "../../store/selectors";
 import { deletePost } from "../../store/actions/postActions";
 import NavigationMenu from "../../components/NavigationMenu";
 import CreatePostForm from "../../components/CreatePostForm";
 import UpdatePostForm from "../../components/UpdatePostForm";
 import { getUser } from "../../store/actions/userActions";
-import { userSelector } from "../../store/selectors";
 import { IPostData } from "../../types/Post";
 
-interface UsersProps {
-  posts: IPostData[];
-}
-
-export default function Users({ posts }: UsersProps) {
+export default function Users() {
   const [editingPostId, setEditingPostId] = useState<number | null>(null);
 
+  const { posts } = useSelector(postsSelector);
   const { user } = useSelector(userSelector);
 
   const dispatch = useDispatch();
