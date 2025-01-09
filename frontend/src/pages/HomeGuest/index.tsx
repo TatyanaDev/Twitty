@@ -2,39 +2,30 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { postsSelector } from "../../store/selectors";
 import { formatDate } from "../../utils/formatDate";
+import Layout from "../../components/Layout";
 
 export default function HomeGuest() {
   const { posts } = useSelector(postsSelector);
 
   return (
-    <section>
-      <div className="d-flex">
-        <article>
-          <nav>
-            <ul>
-              <li>
-                <Link to="/">Home</Link>
+    <Layout>
+      <article>
+        <ul>
+          {posts.length ? (
+            posts.map((post) => (
+              <li key={post.id}>
+                <h1>
+                  {post.user.firstName}&nbsp;{post.user.lastName}&nbsp;@{post.user.userName}&nbsp;·&nbsp;{formatDate(post.createdAt)}
+                </h1>
+                <p>{post.content}</p>
               </li>
-            </ul>
-          </nav>
-        </article>
-        <article>
-          <ul>
-            {posts.length ? (
-              posts.map((post) => (
-                <li key={post.id}>
-                  <h1>
-                    {post.user.firstName}&nbsp;{post.user.lastName}&nbsp;@{post.user.userName}&nbsp;·&nbsp;{formatDate(post.createdAt)}
-                  </h1>
-                  <p>{post.content}</p>
-                </li>
-              ))
-            ) : (
-              <p>No posts yet...</p>
-            )}
-          </ul>
-        </article>
-      </div>
+            ))
+          ) : (
+            <p>No posts yet...</p>
+          )}
+        </ul>
+      </article>
+
       <footer>
         <nav>
           <ul className="d-flex">
@@ -47,6 +38,6 @@ export default function HomeGuest() {
           </ul>
         </nav>
       </footer>
-    </section>
+    </Layout>
   );
 }

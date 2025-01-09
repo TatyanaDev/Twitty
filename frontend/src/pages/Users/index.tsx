@@ -1,14 +1,13 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { userSelector, postsSelector } from "../../store/selectors";
 import { deletePost } from "../../store/actions/postActions";
-import NavigationMenu from "../../components/NavigationMenu";
 import CreatePostForm from "../../components/CreatePostForm";
 import UpdatePostForm from "../../components/UpdatePostForm";
-import { getUser } from "../../store/actions/userActions";
 import { formatDate } from "../../utils/formatDate";
 import { IPostData } from "../../types/Post";
+import Layout from "../../components/Layout";
 
 export default function Users() {
   const [editingPostId, setEditingPostId] = useState<number | null>(null);
@@ -19,10 +18,6 @@ export default function Users() {
   const dispatch = useDispatch();
   const history = useHistory();
 
-  useEffect(() => {
-    dispatch(getUser());
-  }, [dispatch]);
-
   const logoutUser = () => {
     // try {
     //   dispatch(logout_user(userData));
@@ -32,11 +27,10 @@ export default function Users() {
     // }
   };
 
-  const userPosts = posts.filter(({ userId }) => userId === user.id);
+  const userPosts = posts.filter(({ userId }) => userId === user?.id);
 
   return (
-    <section className="d-flex">
-      {user && <NavigationMenu user={user} />}
+    <Layout>
       <div>
         <article>
           <CreatePostForm />
@@ -74,6 +68,6 @@ export default function Users() {
         </article>
         <button onClick={logoutUser}>Sign out</button>
       </div>
-    </section>
+    </Layout>
   );
 }

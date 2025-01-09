@@ -5,12 +5,11 @@ import { getComments, deleteComment, clearComments } from "../../store/actions/c
 import { userSelector, postsSelector, commentsSelector } from "../../store/selectors";
 import CreateCommentForm from "../../components/CreateCommentForm";
 import UpdateCommentForm from "../../components/UpdateCommentForm";
-import NavigationMenu from "../../components/NavigationMenu";
 import { deletePost } from "../../store/actions/postActions";
 import UpdatePostForm from "../../components/UpdatePostForm";
-import { getUser } from "../../store/actions/userActions";
 import { formatDate } from "../../utils/formatDate";
 import { ICommentData } from "../../types/Comment";
+import Layout from "../../components/Layout";
 
 interface RouteParams {
   id: string;
@@ -30,7 +29,6 @@ export default function Comments() {
   const { id: postId } = useParams<RouteParams>();
 
   useEffect(() => {
-    dispatch(getUser());
     dispatch(getComments(user?.id, postId));
 
     return () => {
@@ -51,8 +49,7 @@ export default function Comments() {
   const currentPost = posts.filter(({ id }) => id === parseInt(postId))[0];
 
   return (
-    <section className="d-flex">
-      {user && <NavigationMenu user={user} />}
+    <Layout>
       <div>
         <article>
           {editingPostId === currentPost?.id ? (
@@ -106,6 +103,6 @@ export default function Comments() {
           </ul>
         </article>
       </div>
-    </section>
+    </Layout>
   );
 }
