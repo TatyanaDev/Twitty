@@ -1,0 +1,13 @@
+.sign-up-container {
+  border: 1px solid #949494;
+  padding: 15px 96px 22px;
+  border-radius: 1px;
+}
+
+.sign-up-title {
+  margin-bottom: 22px;
+  text-align: center;
+  color: #54c1ff;
+  font-weight: 700;
+  font-size: 20px;
+}

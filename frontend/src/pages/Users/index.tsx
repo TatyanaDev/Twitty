@@ -1,22 +1,14 @@
-import { useDispatch, useSelector } from "react-redux";
-import { Link, useHistory } from "react-router-dom";
-import { useState } from "react";
+import { useSelector } from "react-redux";
 import { userSelector, postsSelector } from "../../store/selectors";
-import { deletePost } from "../../store/actions/postActions";
-import CreatePostForm from "../../components/CreatePostForm";
-import UpdatePostForm from "../../components/UpdatePostForm";
-import { formatDate } from "../../utils/formatDate";
+import CreateForm from "../../components/CreateForm";
 import { IPostData } from "../../types/Post";
 import Layout from "../../components/Layout";
+import Post from "../../components/Post";
+import style from "./styles.module.css";
 
 export default function Users() {
-  const [editingPostId, setEditingPostId] = useState<number | null>(null);
-
   const { posts } = useSelector(postsSelector);
   const { user } = useSelector(userSelector);
-
-  const dispatch = useDispatch();
-  const history = useHistory();
 
   const logoutUser = () => {
     // try {
@@ -30,44 +22,27 @@ export default function Users() {
   const userPosts = posts.filter(({ userId }) => userId === user?.id);
 
   return (
-    <Layout>
-      <div>
+    <>
+      <Layout>
         <article>
-          <CreatePostForm />
-        </article>
-        <article>
-          <ul>
-            {userPosts.length ? (
-              userPosts.map((post: IPostData) => (
-                <li key={post.id}>
-                  {editingPostId === post.id ? (
-                    <UpdatePostForm post={post} setEditingPostId={setEditingPostId} />
-                  ) : (
-                    <>
-                      <h1>
-                        <Link to={`/posts/${post.id}`}>
-                          {post.user?.firstName || user.firstName}&nbsp;{post.user?.lastName || user.lastName}&nbsp;@{post.user?.userName || user.userName}&nbsp;·&nbsp;{formatDate(post.createdAt)}
-                        </Link>
+          <div className={style["user-info-wrapper"]}>
+            <h3 className="font-17 fw-700 mb-2">
+              {user?.firstName}&nbsp;{user?.lastName}
+            </h3>
 
-                        {post.userId === user?.id && (
-                          <>
-                            <button onClick={() => setEditingPostId(post.id)}>Edit</button>
-                            <button onClick={() => dispatch(deletePost(user.id, post.id))}>Delete</button>
-                          </>
-                        )}
-                      </h1>
-                      <p>{post.content}</p>
-                    </>
-                  )}
-                </li>
-              ))
-            ) : (
-              <p>No posts yet...</p>
-            )}
-          </ul>
+            <p className={style["user-posts-info"]}>{userPosts.length}&nbsp;posts</p>
+            <p className="color-gray font-12">@{user?.userName}</p>
+          </div>
+
+          <CreateForm />
         </article>
-        <button onClick={logoutUser}>Sign out</button>
-      </div>
-    </Layout>
+
+        <article>
+          <ul>{userPosts.length ? userPosts.map((post: IPostData) => <Post post={post} />) : <p className="no-yet-message">No posts yet...</p>}</ul>
+        </article>
+      </Layout>
+
+      <button onClick={logoutUser}>Sign out</button>
+    </>
   );
 }

@@ -1,0 +1,23 @@
+.textarea-form-create {
+  border-bottom: 1px solid #949494;
+  text-align: end;
+}
+
+.textarea-create {
+  padding: 13px 15px;
+  font-size: 12px;
+  resize: none;
+  border: none;
+  width: 100%;
+}
+
+.create-button {
+  background-color: #54c1ff;
+  border: 1px solid #34b6ff;
+  margin-bottom: 12px;
+  margin-right: 17px;
+  border-radius: 2px;
+  padding: 3px 20px;
+  color: #ffffff;
+  font-size: 12px;
+}

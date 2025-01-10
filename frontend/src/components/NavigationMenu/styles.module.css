@@ -1,0 +1,13 @@
+.aside {
+  position: absolute;
+  width: 122px;
+  left: 205px;
+  top: 45px;
+}
+
+.navigation-link {
+  margin-bottom: 10px;
+  font-weight: 500;
+  color: #000000;
+  font-size: 20px;
+}

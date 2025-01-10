@@ -1,0 +1,31 @@
+.text-end {
+  text-align: end;
+}
+
+.textarea-update {
+  padding: 5px 12px 7px 10px;
+  border-color: #949494;
+  border-radius: 1px;
+  font-size: 12px;
+  resize: none;
+  width: 100%;
+}
+
+.save-button {
+  background-color: #54c1ff;
+  border: 1px solid #34b6ff;
+  margin-right: 11px;
+  border-radius: 2px;
+  padding: 4px 22px;
+  color: #ffffff;
+  font-size: 12px;
+}
+
+.cancel-button {
+  background-color: #ffffff;
+  border: 1px solid #34b6ff;
+  border-radius: 2px;
+  padding: 4px 17px;
+  color: #54c1ff;
+  font-size: 12px;
+}

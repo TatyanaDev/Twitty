@@ -1,0 +1,13 @@
+.sign-in-container {
+  border: 1px solid #949494;
+  padding: 12px 102px 24px;
+  border-radius: 1px;
+}
+
+.sign-in-title {
+  margin-bottom: 29px;
+  text-align: center;
+  color: #54c1ff;
+  font-weight: 700;
+  font-size: 20px;
+}

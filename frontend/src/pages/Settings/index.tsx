@@ -3,7 +3,9 @@ import Layout from "../../components/Layout";
 export default function Settings() {
   return (
     <Layout>
-      <p>Settings page</p>
+      <article>
+        <h3 className="main-header">Settings page</h3>
+      </article>
     </Layout>
   );
 }

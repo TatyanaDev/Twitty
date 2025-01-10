@@ -1,0 +1,10 @@
+.user-info-wrapper {
+  border-bottom: 1px solid #949494;
+  padding: 16px;
+}
+
+.user-posts-info {
+  margin-bottom: 2px;
+  color: #949494;
+  font-size: 10px;
+}

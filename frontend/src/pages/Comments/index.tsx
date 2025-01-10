@@ -3,13 +3,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import { getComments, deleteComment, clearComments } from "../../store/actions/commentActions";
 import { userSelector, postsSelector, commentsSelector } from "../../store/selectors";
-import CreateCommentForm from "../../components/CreateCommentForm";
-import UpdateCommentForm from "../../components/UpdateCommentForm";
 import { deletePost } from "../../store/actions/postActions";
-import UpdatePostForm from "../../components/UpdatePostForm";
+import UpdateForm from "../../components/UpdateForm";
+import CreateForm from "../../components/CreateForm";
 import { formatDate } from "../../utils/formatDate";
 import { ICommentData } from "../../types/Comment";
 import Layout from "../../components/Layout";
+import style from "./styles.module.css";
 
 interface RouteParams {
   id: string;
@@ -50,59 +50,70 @@ export default function Comments() {
 
   return (
     <Layout>
-      <div>
-        <article>
-          {editingPostId === currentPost?.id ? (
-            <UpdatePostForm post={currentPost} setEditingPostId={setEditingPostId} />
-          ) : (
-            <>
-              <h1>
-                {currentPost?.user?.firstName || user?.firstName}&nbsp;{currentPost?.user?.lastName || user?.lastName}&nbsp;@{currentPost?.user?.userName || user?.userName}&nbsp;·&nbsp;{formatDate(currentPost?.createdAt)}
-              </h1>
-              <p>{currentPost?.content}</p>
+      <article>
+        <div className={style["comments-wrapper"]}>
+          <h3 className="font-17 fw-700 mb-2">Thread</h3>
+          <p className="color-gray font-12">{comments.length}&nbsp;replies</p>
+        </div>
 
+        {editingPostId === currentPost?.id ? (
+          <UpdateForm item={currentPost} setEditingId={setEditingPostId} />
+        ) : (
+          <div className="item">
+            <h4 className="mb-9 font-12 fw-700">
+              {currentPost?.user?.firstName || user?.firstName}&nbsp;{currentPost?.user?.lastName || user?.lastName}&nbsp;
+              <span className="color-gray fw-400">
+                @{currentPost?.user?.userName || user?.userName}&nbsp;·&nbsp;{formatDate(currentPost?.createdAt)}
+              </span>
               {currentPost?.userId === user?.id && (
                 <>
                   <button onClick={() => setEditingPostId(currentPost.id)}>Edit</button>
                   <button onClick={() => handleDeletePost(user.id, currentPost.id)}>Delete</button>
                 </>
               )}
-            </>
-          )}
-        </article>
-        <article>
-          <CreateCommentForm postId={currentPost?.id} />
-        </article>
-        <article>
-          <ul>
-            {comments.length ? (
-              comments.map((comment: ICommentData) => (
-                <li key={comment.id}>
-                  {editingCommentId === comment.id ? (
-                    <UpdateCommentForm comment={comment} setEditingCommentId={setEditingCommentId} />
-                  ) : (
-                    <>
-                      <h1>
-                        {comment.user?.firstName || user.firstName}&nbsp;{comment.user?.lastName || user.lastName}&nbsp;@{comment.user?.userName || user.userName}&nbsp;·&nbsp;{formatDate(comment.createdAt)}
-                      </h1>
-                      <p>{comment.content}</p>
+            </h4>
 
-                      {comment.userId === user.id && (
+            <p className="item-content">{currentPost?.content}</p>
+          </div>
+        )}
+      </article>
+
+      <article>
+        <CreateForm postId={currentPost?.id} />
+      </article>
+
+      <article>
+        <ul>
+          {comments.length ? (
+            comments.map((comment: ICommentData) => (
+              <li key={comment.id} className="item">
+                {editingCommentId === comment.id ? (
+                  <UpdateForm item={comment} setEditingId={setEditingCommentId} isPost={false} />
+                ) : (
+                  <>
+                    <h4 className="mb-9 font-12 fw-700">
+                      {comment.user?.firstName || user.firstName}&nbsp;{comment.user?.lastName || user.lastName}&nbsp;
+                      <span className="color-gray fw-400">
+                        @{comment.user?.userName || user.userName}&nbsp;·&nbsp;{formatDate(comment.createdAt)}
+                      </span>
+                      {comment.userId === user?.id && (
                         <>
                           <button onClick={() => setEditingCommentId(comment.id)}>Edit</button>
                           <button onClick={() => dispatch(deleteComment(user.id, postId, comment.id))}>Delete</button>
                         </>
                       )}
-                    </>
-                  )}
-                </li>
-              ))
-            ) : (
-              <p>No comments yet... Be the first!</p>
-            )}
-          </ul>
-        </article>
-      </div>
+                    </h4>
+
+                    <p className="item-content">{comment.content}</p>
+                  </>
+                )}
+              </li>
+            ))
+          ) : (
+            <p className="no-yet-message ">No comments yet... Be the first!</p>
+          )}
+        </ul>
+      </article>
     </Layout>
   );
 }
