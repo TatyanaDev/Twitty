@@ -1,10 +1,10 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Formik, Field, Form } from "formik";
 import { POST_CONTENT_VALIDATION_SCHEMA, COMMENT_CONTENT_VALIDATION_SCHEMA } from "../../utils/validationSchemas";
+import { ICommentData, CommentContent } from "../../interfaces/Comment";
 import { updateComment } from "../../store/actions/commentActions";
-import { ICommentData, CommentContent } from "../../types/Comment";
+import { IPostData, PostContent } from "../../interfaces/Post";
 import { updatePost } from "../../store/actions/postActions";
-import { IPostData, PostContent } from "../../types/Post";
 import { userSelector } from "../../store/selectors";
 import style from "./styles.module.css";
 

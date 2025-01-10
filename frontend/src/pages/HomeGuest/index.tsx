@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { postsSelector } from "../../store/selectors";
 import { formatDate } from "../../utils/formatDate";
-import { IPostData } from "../../types/Post";
+import { IPostData } from "../../interfaces/Post";
 import Layout from "../../components/Layout";
 import style from "./styles.module.css";
 
@@ -44,7 +44,7 @@ export default function HomeGuest() {
           </div>
 
           <nav>
-            <ul className="d-flex">
+            <ul className={style['d-flex']}>
               <li>
                 <Link to="/login" className={style["sign-in-link"]}>
                   Sign in

@@ -1,5 +1,5 @@
 import ACTION_TYPES from "../actions/actionTypes";
-import { IUserData } from "../../types/User";
+import { IUserData } from "../../interfaces/User";
 
 interface RegisterUserRequestAction {
   type: typeof ACTION_TYPES.REGISTER_USER_REQUEST;

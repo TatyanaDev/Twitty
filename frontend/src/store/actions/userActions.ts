@@ -1,9 +1,8 @@
 import { ThunkDispatch } from "redux-thunk";
 import { AnyAction, Dispatch } from "redux";
-import { UserRegistrationFormValues } from "../../components/UserRegistrationForm";
-import { UserLoginFormValues } from "../../components/UserLoginForm";
+import { UserRegistrationFormValues, UserLoginFormValues } from "../../interfaces/User";
 import UserService from "../../services/user.service";
-import { RootState } from "../../types/state";
+import { RootState } from "../../interfaces/state";
 import ACTION_TYPES from "./actionTypes";
 
 export const getUser = () => async (dispatch: Dispatch) => {

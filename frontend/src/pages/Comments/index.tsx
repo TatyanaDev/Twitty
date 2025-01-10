@@ -4,10 +4,10 @@ import { useState, useEffect } from "react";
 import { getComments, deleteComment, clearComments } from "../../store/actions/commentActions";
 import { userSelector, postsSelector, commentsSelector } from "../../store/selectors";
 import { deletePost } from "../../store/actions/postActions";
+import { ICommentData } from "../../interfaces/Comment";
 import UpdateForm from "../../components/UpdateForm";
 import CreateForm from "../../components/CreateForm";
 import { formatDate } from "../../utils/formatDate";
-import { ICommentData } from "../../types/Comment";
 import Layout from "../../components/Layout";
 import style from "./styles.module.css";
 

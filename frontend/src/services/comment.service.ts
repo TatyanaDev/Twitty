@@ -1,5 +1,5 @@
 import { AxiosResponse } from "axios";
-import { CommentContent, CommentsResponse, CommentResponse, CommentIdResponse } from "../types/Comment";
+import { CommentsResponse, CommentContent, CommentResponse, CommentIdResponse } from "../interfaces/Comment";
 import http from "../api";
 
 export default class CommentService {

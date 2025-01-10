@@ -4,13 +4,9 @@ import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { USER_LOGIN_VALIDATION_SCHEMA } from "../../utils/validationSchemas";
+import { UserLoginFormValues } from "../../interfaces/User";
 import { loginUser } from "../../store/actions/userActions";
 import style from "./styles.module.css";
-
-export interface UserLoginFormValues {
-  email: string;
-  password: string;
-}
 
 export default function UserLoginForm() {
   const [formError, setFormError] = useState<string | null>(null);

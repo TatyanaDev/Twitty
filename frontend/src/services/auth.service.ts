@@ -1,6 +1,6 @@
 import { AxiosResponse } from "axios";
-import { AuthResponse } from "../types/Auth";
-import { IUserData } from "../types/User";
+import { AuthResponse } from "../interfaces/Auth";
+import { IUserData } from "../interfaces/User";
 import http from "../api";
 
 export default class AuthService {

@@ -4,17 +4,9 @@ import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { USER_REGISTRATION_VALIDATION_SCHEMA } from "../../utils/validationSchemas";
+import { UserRegistrationFormValues } from "../../interfaces/User";
 import { registerUser } from "../../store/actions/userActions";
 import style from "./styles.module.css";
-
-export interface UserRegistrationFormValues {
-  firstName: string;
-  lastName: string;
-  userName: string;
-  email: string;
-  password: string;
-  passwordConfirmation: string;
-}
 
 export default function UserRegistrationForm() {
   const [formError, setFormError] = useState<string | null>(null);

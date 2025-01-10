@@ -1,5 +1,5 @@
 import { AxiosResponse } from "axios";
-import { PostContent, PostsResponse, PostResponse, PostIdResponse } from "../types/Post";
+import { PostsResponse, PostContent, PostResponse, PostIdResponse } from "../interfaces/Post";
 import http from "../api";
 
 export default class PostService {

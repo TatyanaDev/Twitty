@@ -4,7 +4,7 @@ import { useState } from "react";
 import { deletePost } from "../../store/actions/postActions";
 import { userSelector } from "../../store/selectors";
 import { formatDate } from "../../utils/formatDate";
-import { IPostData } from "../../types/Post";
+import { IPostData } from "../../interfaces/Post";
 import style from "./styles.module.css";
 import UpdateForm from "../UpdateForm";
 

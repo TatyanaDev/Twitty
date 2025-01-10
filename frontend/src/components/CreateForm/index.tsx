@@ -3,9 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { POST_CONTENT_VALIDATION_SCHEMA, COMMENT_CONTENT_VALIDATION_SCHEMA } from "../../utils/validationSchemas";
 import { createComment } from "../../store/actions/commentActions";
 import { createPost } from "../../store/actions/postActions";
+import { CommentContent } from "../../interfaces/Comment";
 import { userSelector } from "../../store/selectors";
-import { CommentContent } from "../../types/Comment";
-import { PostContent } from "../../types/Post";
+import { PostContent } from "../../interfaces/Post";
 import style from "./styles.module.css";
 
 interface CreateCommentFormProps {

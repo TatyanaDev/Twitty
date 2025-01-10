@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import { userSelector, postsSelector } from "../../store/selectors";
 import CreateForm from "../../components/CreateForm";
-import { IPostData } from "../../types/Post";
+import { IPostData } from "../../interfaces/Post";
 import Layout from "../../components/Layout";
 import Post from "../../components/Post";
 import style from "./styles.module.css";

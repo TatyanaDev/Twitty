@@ -1,4 +1,4 @@
-import { ICommentData } from "../../types/Comment";
+import { ICommentData } from "../../interfaces/Comment";
 import ACTION_TYPES from "../actions/actionTypes";
 
 interface GetCommentsRequestAction {

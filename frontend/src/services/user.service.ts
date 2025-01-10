@@ -1,8 +1,6 @@
 import { AxiosResponse } from "axios";
-import { UserRegistrationFormValues } from "../components/UserRegistrationForm";
-import { UserLoginFormValues } from "../components/UserLoginForm";
-import { AuthResponse } from "../types/Auth";
-import { UserResponse } from "../types/User";
+import { UserRegistrationFormValues, UserLoginFormValues, UserResponse } from "../interfaces/User";
+import { AuthResponse } from "../interfaces/Auth";
 import http from "../api";
 
 export default class UserService {

@@ -1,5 +1,5 @@
 import ACTION_TYPES from "../actions/actionTypes";
-import { IPostData } from "../../types/Post";
+import { IPostData } from "../../interfaces/Post";
 
 interface GetPostsRequestAction {
   type: typeof ACTION_TYPES.GET_POSTS_REQUEST;
