@@ -10,14 +10,16 @@ export interface UserResponse {
   data: IUserData;
 }
 
-export interface UserLoginFormValues {
-  email: string;
-  password: string;
-}
-
-export interface UserRegistrationFormValues extends UserLoginFormValues {
+export interface UserRegistrationFormValues {
   firstName: string;
   lastName: string;
   userName: string;
+  email: string;
+  password: string;
   passwordConfirmation: string;
+}
+
+export interface UserLoginFormValues {
+  login: string;
+  password: string;
 }

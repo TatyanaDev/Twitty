@@ -15,7 +15,7 @@ export default function UserLoginForm() {
   const history = useHistory();
 
   const initialValues: UserLoginFormValues = {
-    email: "",
+    login: "",
     password: "",
   };
 
@@ -40,14 +40,14 @@ export default function UserLoginForm() {
         {({ errors, touched }) => (
           <Form>
             <div className={style["mb-10"]}>
-              <label htmlFor="email" className="d-block">
+              <label htmlFor="login" className="d-block">
                 User name (email)
               </label>
-              <Field name="email" id="email" aria-label="Email" aria-invalid={touched.email && !!errors.email} aria-describedby="emailError" />
+              <Field name="login" id="login" aria-label="Login" aria-invalid={touched.login && !!errors.login} aria-describedby="loginError" />
 
-              {errors.email && touched.email && (
-                <p id="emailError" className="error">
-                  {errors.email}
+              {errors.login && touched.login && (
+                <p id="loginError" className="error">
+                  {errors.login}
                 </p>
               )}
             </div>

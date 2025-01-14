@@ -17,7 +17,7 @@ export default function Home() {
       </article>
 
       <article>
-        <ul>{posts.length ? posts.map((post: IPostData) => <Post post={post} />) : <p className="no-yet-message">No posts yet...</p>}</ul>
+        <ul>{posts.length ? posts.map((post: IPostData) => <Post key={post.id} post={post} />) : <p className="no-yet-message">No posts yet...</p>}</ul>
       </article>
     </Layout>
   );

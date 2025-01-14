@@ -13,7 +13,19 @@ export const USER_REGISTRATION_VALIDATION_SCHEMA = Yup.object({
 });
 
 export const USER_LOGIN_VALIDATION_SCHEMA = Yup.object({
-  email: Yup.string().trim().email('Must contain @ and "."').required("Email is required"),
+  login: Yup.string()
+    .trim()
+    .required("Login is required")
+    .test("is-valid-email-or-username", "Login must be a valid email or a non-empty username", (value) => {
+      if (!value) {
+        return false;
+      }
+
+      const isEmail = Yup.string().email().isValidSync(value);
+      const isUserName = value.trim().length > 0;
+
+      return isEmail || isUserName;
+    }),
   password: Yup.string().trim().min(6, "Password must be longer than 6 characters!").required("Password is required!"),
 });
 

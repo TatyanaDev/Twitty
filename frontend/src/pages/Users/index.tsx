@@ -38,7 +38,7 @@ export default function Users() {
         </article>
 
         <article>
-          <ul>{userPosts.length ? userPosts.map((post: IPostData) => <Post post={post} />) : <p className="no-yet-message">No posts yet...</p>}</ul>
+          <ul>{userPosts.length ? userPosts.map((post: IPostData) => <Post key={post.id} post={post} />) : <p className="no-yet-message">No posts yet...</p>}</ul>
         </article>
       </Layout>
 

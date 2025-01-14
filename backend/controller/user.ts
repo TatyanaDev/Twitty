@@ -1,4 +1,5 @@
 const { validationResult } = require("express-validator");
+const { Op } = require("sequelize");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const ApiError = require("../exceptions/apiError");
@@ -57,9 +58,13 @@ module.exports.loginUser = async (req, res, next) => {
       return next(ApiError.BadRequest("Validation error", errors.array()));
     }
 
-    const { email, password } = req.body;
+    const { login, password } = req.body;
 
-    const user = await User.findOne({ where: { email } });
+    const user = await User.findOne({
+      where: {
+        [Op.or]: [{ email: login }, { userName: login }],
+      },
+    });
 
     if (!user) {
       throw ApiError.notFoundError("User");
