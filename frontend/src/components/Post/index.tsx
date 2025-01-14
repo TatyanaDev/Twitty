@@ -5,6 +5,7 @@ import { deletePost } from "../../store/actions/postActions";
 import { userSelector } from "../../store/selectors";
 import { formatDate } from "../../utils/formatDate";
 import { IPostData } from "../../interfaces/Post";
+import DropdownMenu from "../DropdownMenu";
 import style from "./styles.module.css";
 import UpdateForm from "../UpdateForm";
 
@@ -20,7 +21,7 @@ export default function Post({ post }: PostProps) {
   const dispatch = useDispatch();
 
   return (
-    <li key={post.id} className="item">
+    <li className="item">
       {editingPostId === post.id ? (
         <>
           <h4 className="mb-9 font-12 fw-700">
@@ -36,7 +37,7 @@ export default function Post({ post }: PostProps) {
         </>
       ) : (
         <>
-          <h4 className="mb-9 font-12 fw-700">
+          <h4 className="header-container">
             <Link to={`/posts/${post.id}`} className={style["color-black"]}>
               {post.user?.firstName || user.firstName}&nbsp;{post.user?.lastName || user.lastName}&nbsp;
               <span className="color-gray fw-400">
@@ -44,12 +45,7 @@ export default function Post({ post }: PostProps) {
               </span>
             </Link>
 
-            {post.userId === user?.id && (
-              <>
-                <button onClick={() => setEditingPostId(post.id)}>Edit</button>
-                <button onClick={() => dispatch(deletePost(user.id, post.id))}>Delete</button>
-              </>
-            )}
+            {post.userId === user?.id && <DropdownMenu handleEditButton={() => setEditingPostId(post.id)} handleDeleteButton={() => dispatch(deletePost(user.id, post.id))} />}
           </h4>
 
           <p className="item-content">{post.content}</p>

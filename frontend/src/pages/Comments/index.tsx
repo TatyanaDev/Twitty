@@ -1,13 +1,15 @@
 import { useHistory, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
-import { getComments, deleteComment, clearComments } from "../../store/actions/commentActions";
 import { userSelector, postsSelector, commentsSelector } from "../../store/selectors";
+import { getComments, clearComments } from "../../store/actions/commentActions";
 import { deletePost } from "../../store/actions/postActions";
+import DropdownMenu from "../../components/DropdownMenu";
 import { ICommentData } from "../../interfaces/Comment";
 import UpdateForm from "../../components/UpdateForm";
 import CreateForm from "../../components/CreateForm";
 import { formatDate } from "../../utils/formatDate";
+import Comment from "../../components/Comment";
 import Layout from "../../components/Layout";
 import style from "./styles.module.css";
 
@@ -16,7 +18,6 @@ interface RouteParams {
 }
 
 export default function Comments() {
-  const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
   const [editingPostId, setEditingPostId] = useState<number | null>(null);
 
   const { comments } = useSelector(commentsSelector);
@@ -57,20 +58,27 @@ export default function Comments() {
         </div>
 
         {editingPostId === currentPost?.id ? (
-          <UpdateForm item={currentPost} setEditingId={setEditingPostId} />
-        ) : (
           <div className="item">
             <h4 className="mb-9 font-12 fw-700">
-              {currentPost?.user?.firstName || user?.firstName}&nbsp;{currentPost?.user?.lastName || user?.lastName}&nbsp;
+              {currentPost?.user?.firstName || user.firstName}&nbsp;{currentPost?.user?.lastName || user.lastName}&nbsp;
               <span className="color-gray fw-400">
-                @{currentPost?.user?.userName || user?.userName}&nbsp;·&nbsp;{formatDate(currentPost?.createdAt)}
+                @{currentPost?.user?.userName || user.userName}&nbsp;·&nbsp;{formatDate(currentPost?.createdAt)}
               </span>
-              {currentPost?.userId === user?.id && (
-                <>
-                  <button onClick={() => setEditingPostId(currentPost.id)}>Edit</button>
-                  <button onClick={() => handleDeletePost(user.id, currentPost.id)}>Delete</button>
-                </>
-              )}
+            </h4>
+
+            <UpdateForm item={currentPost} setEditingId={setEditingPostId} />
+          </div>
+        ) : (
+          <div className="item">
+            <h4 className="header-container">
+              <div>
+                {currentPost?.user?.firstName || user?.firstName}&nbsp;{currentPost?.user?.lastName || user?.lastName}&nbsp;
+                <span className="color-gray fw-400">
+                  @{currentPost?.user?.userName || user?.userName}&nbsp;·&nbsp;{formatDate(currentPost?.createdAt)}
+                </span>
+              </div>
+
+              {currentPost?.userId === user?.id && <DropdownMenu handleEditButton={() => setEditingPostId(currentPost.id)} handleDeleteButton={() => handleDeletePost(user.id, currentPost.id)} />}
             </h4>
 
             <p className="item-content">{currentPost?.content}</p>
@@ -83,36 +91,7 @@ export default function Comments() {
       </article>
 
       <article>
-        <ul>
-          {comments.length ? (
-            comments.map((comment: ICommentData) => (
-              <li key={comment.id} className="item">
-                {editingCommentId === comment.id ? (
-                  <UpdateForm item={comment} setEditingId={setEditingCommentId} isPost={false} />
-                ) : (
-                  <>
-                    <h4 className="mb-9 font-12 fw-700">
-                      {comment.user?.firstName || user.firstName}&nbsp;{comment.user?.lastName || user.lastName}&nbsp;
-                      <span className="color-gray fw-400">
-                        @{comment.user?.userName || user.userName}&nbsp;·&nbsp;{formatDate(comment.createdAt)}
-                      </span>
-                      {comment.userId === user?.id && (
-                        <>
-                          <button onClick={() => setEditingCommentId(comment.id)}>Edit</button>
-                          <button onClick={() => dispatch(deleteComment(user.id, postId, comment.id))}>Delete</button>
-                        </>
-                      )}
-                    </h4>
-
-                    <p className="item-content">{comment.content}</p>
-                  </>
-                )}
-              </li>
-            ))
-          ) : (
-            <p className="no-yet-message ">No comments yet... Be the first!</p>
-          )}
-        </ul>
+        <ul>{comments.length ? comments.map((comment: ICommentData) => <Comment key={comment.id} comment={comment} postId={postId} />) : <p className="no-yet-message ">No comments yet... Be the first!</p>}</ul>
       </article>
     </Layout>
   );

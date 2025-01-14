@@ -131,3 +131,12 @@ input::placeholder {
   word-wrap: break-word;
   font-size: 12px;
 }
+
+.header-container {
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 9px;
+  font-weight: 700;
+  font-size: 12px;
+  display: flex;
+}
