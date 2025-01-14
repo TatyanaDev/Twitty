@@ -14,7 +14,7 @@ interface PostProps {
 }
 
 export default function Post({ post }: PostProps) {
-  const [editingPostId, setEditingPostId] = useState<number | null>(null);
+  const [editingId, setEditingId] = useState<number | null>(null);
 
   const { user } = useSelector(userSelector);
 
@@ -22,7 +22,7 @@ export default function Post({ post }: PostProps) {
 
   return (
     <li className="item">
-      {editingPostId === post.id ? (
+      {editingId === post.id ? (
         <>
           <h4 className="mb-9 font-12 fw-700">
             <Link to={`/posts/${post.id}`} className={style["color-black"]}>
@@ -33,7 +33,7 @@ export default function Post({ post }: PostProps) {
             </Link>
           </h4>
 
-          <UpdateForm item={post} setEditingId={setEditingPostId} />
+          <UpdateForm item={post} setEditingId={setEditingId} />
         </>
       ) : (
         <>
@@ -45,7 +45,7 @@ export default function Post({ post }: PostProps) {
               </span>
             </Link>
 
-            {post.userId === user?.id && <DropdownMenu handleEditButton={() => setEditingPostId(post.id)} handleDeleteButton={() => dispatch(deletePost(user.id, post.id))} />}
+            {post.userId === user?.id && <DropdownMenu handleEditButton={() => setEditingId(post.id)} handleDeleteButton={() => dispatch(deletePost(user.id, post.id))} />}
           </h4>
 
           <p className="item-content">{post.content}</p>

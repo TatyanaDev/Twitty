@@ -13,7 +13,7 @@ interface CommentProps {
 }
 
 export default function Comment({ comment, postId }: CommentProps) {
-  const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
+  const [editingId, setEditingId] = useState<number | null>(null);
 
   const { user } = useSelector(userSelector);
 
@@ -21,7 +21,7 @@ export default function Comment({ comment, postId }: CommentProps) {
 
   return (
     <li className="item">
-      {editingCommentId === comment.id ? (
+      {editingId === comment.id ? (
         <>
           <h4 className="mb-9 font-12 fw-700">
             {comment.user?.firstName || user.firstName}&nbsp;{comment.user?.lastName || user.lastName}&nbsp;
@@ -30,7 +30,7 @@ export default function Comment({ comment, postId }: CommentProps) {
             </span>
           </h4>
 
-          <UpdateForm item={comment} setEditingId={setEditingCommentId} isPost={false} />
+          <UpdateForm item={comment} setEditingId={setEditingId} isPost={false} />
         </>
       ) : (
         <>
@@ -42,7 +42,7 @@ export default function Comment({ comment, postId }: CommentProps) {
               </span>
             </div>
 
-            {comment.userId === user?.id && <DropdownMenu handleEditButton={() => setEditingCommentId(comment.id)} handleDeleteButton={() => dispatch(deleteComment(user.id, postId, comment.id))} />}
+            {comment.userId === user?.id && <DropdownMenu handleEditButton={() => setEditingId(comment.id)} handleDeleteButton={() => dispatch(deleteComment(user.id, postId, comment.id))} />}
           </h4>
 
           <p className="item-content">{comment.content}</p>
