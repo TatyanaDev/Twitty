@@ -6,8 +6,6 @@ const { validateContent } = require("../middlewares/validators");
 
 const userAndPostsRouter = Router({ mergeParams: true });
 
-userAndPostsRouter.get("/", UserAndPostsController.getUserPosts);
-
 userAndPostsRouter.post("/", validateContent, UserAndPostsController.createPostForUser);
 
 userAndPostsRouter.patch("/:postId", verifyOwnershipMw("post"), validateContent, UserAndPostsController.updateUserPost);

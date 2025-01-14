@@ -2,6 +2,7 @@ import { ThunkDispatch } from "redux-thunk";
 import { AnyAction, Dispatch } from "redux";
 import { UserRegistrationFormValues, UserLoginFormValues } from "../../interfaces/User";
 import UserService from "../../services/user.service";
+import AuthService from "../../services/auth.service";
 import { RootState } from "../../interfaces/state";
 import ACTION_TYPES from "./actionTypes";
 
@@ -64,14 +65,21 @@ export const loginUser = (user: UserLoginFormValues) => async (dispatch: ThunkDi
   }
 };
 
-// export const logout_user = (user: IUserData) => async (dispatch: any) => {
-//   dispatch({ type: ACTION_TYPES.LOGOUT_USER_DATA_REQUEST });
+export const logoutUser = () => async (dispatch: Dispatch) => {
+  try {
+    dispatch({ type: ACTION_TYPES.LOGOUT_USER_DATA_REQUEST });
 
-//   localStorage.removeItem("token");
+    await AuthService.logout();
 
-//   // await AuthService.logout({ email: user.email });
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
 
-//   dispatch({ type: ACTION_TYPES.LOGOUT_USER_DATA_SUCCESS });
+    dispatch({ type: ACTION_TYPES.LOGOUT_USER_DATA_SUCCESS });
+    dispatch({ type: ACTION_TYPES.CLEAR_USER_DATA });
+  } catch (err) {
+    dispatch({ type: ACTION_TYPES.LOGOUT_USER_DATA_ERROR, payload: err });
 
-//   localStorage.removeItem("token");
-// };
+    throw err;
+  }
+};
+

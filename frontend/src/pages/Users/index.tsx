@@ -1,5 +1,7 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 import { userSelector, postsSelector } from "../../store/selectors";
+import { logoutUser } from "../../store/actions/userActions";
 import CreateForm from "../../components/CreateForm";
 import { IPostData } from "../../interfaces/Post";
 import Layout from "../../components/Layout";
@@ -10,13 +12,17 @@ export default function Users() {
   const { posts } = useSelector(postsSelector);
   const { user } = useSelector(userSelector);
 
-  const logoutUser = () => {
-    // try {
-    //   dispatch(logout_user(userData));
-    //   history.push("/");
-    // } catch (err) {
-    //   console.error(err);
-    // }
+  const dispatch = useDispatch();
+  const history = useHistory();
+
+  const handleLogoutUser = async () => {
+    try {
+      await dispatch(logoutUser());
+
+      history.push("/");
+    } catch (err) {
+      console.error("Error during logout:", err);
+    }
   };
 
   const userPosts = posts.filter(({ userId }) => userId === user?.id);
@@ -42,7 +48,7 @@ export default function Users() {
         </article>
       </Layout>
 
-      <button onClick={logoutUser}>Sign out</button>
+      <button onClick={handleLogoutUser}>Sign out</button>
     </>
   );
 }

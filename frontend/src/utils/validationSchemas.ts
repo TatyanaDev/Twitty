@@ -25,7 +25,8 @@ export const USER_LOGIN_VALIDATION_SCHEMA = Yup.object({
       const isUserName = value.trim().length > 0;
 
       return isEmail || isUserName;
-    }),
+    })
+    .matches(/^\S*$/, "Login must not contain spaces"),
   password: Yup.string().trim().min(6, "Password must be longer than 6 characters!").required("Password is required!"),
 });
 

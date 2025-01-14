@@ -6,3 +6,7 @@ interface IAuthData {
 export interface AuthResponse {
   data: IAuthData;
 }
+
+export interface LogoutResponse {
+  data: { message: string };
+}

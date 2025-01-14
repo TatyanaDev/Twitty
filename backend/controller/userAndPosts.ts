@@ -2,25 +2,6 @@ const { validationResult } = require("express-validator");
 const ApiError = require("../exceptions/apiError");
 const { Post } = require("../models");
 
-module.exports.getUserPosts = async (req, res, next) => {
-  try {
-    const { userId } = req.params;
-
-    const posts = await Post.findAll({
-      where: { userId },
-      order: [["createdAt", "DESC"]],
-    });
-
-    if (!posts.length) {
-      throw ApiError.notFoundError("Posts");
-    }
-
-    res.status(200).send({ data: posts });
-  } catch (err) {
-    next(err);
-  }
-};
-
 module.exports.createPostForUser = async (req, res, next) => {
   try {
     const errors = validationResult(req);

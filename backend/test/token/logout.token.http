@@ -1,7 +1,3 @@
 POST http://localhost:5000/api/token/logout HTTP/1.1
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNzM1MTQwMDUyLCJleHAiOjE3MzUxNDM2NTJ9.8WZmK4GAEqzWMspqMRT1KB_UeXaDHCNB6WwExD4_XJk
 Content-Type: application/json
-
-{
-  "email": "jane.doe@example.com"
-} 

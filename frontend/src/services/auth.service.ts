@@ -1,6 +1,5 @@
 import { AxiosResponse } from "axios";
-import { AuthResponse } from "../interfaces/Auth";
-import { IUserData } from "../interfaces/User";
+import { AuthResponse, LogoutResponse } from "../interfaces/Auth";
 import http from "../api";
 
 export default class AuthService {
@@ -8,7 +7,7 @@ export default class AuthService {
     return http.get<AuthResponse>("token/refresh", { withCredentials: true });
   }
 
-  static async logout(data: IUserData): Promise<AxiosResponse<any>> {
-    return http.post("/token/logout", data);
+  static async logout(): Promise<AxiosResponse<LogoutResponse>> {
+    return http.post<LogoutResponse>("/token/logout");
   }
 }

@@ -52,6 +52,7 @@ api.interceptors.response.use(
         console.error("Failed to refresh token:", err);
 
         localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
 
         window.location.href = "/";
 

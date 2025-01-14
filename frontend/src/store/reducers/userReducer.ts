@@ -41,7 +41,11 @@ interface GetUserDataErrorAction {
   error: string;
 }
 
-type UserActions = RegisterUserRequestAction | RegisterUserSuccessAction | RegisterUserErrorAction | LoginUserRequestAction | LoginUserSuccessAction | LoginUserErrorAction | GetUserDataRequestAction | GetUserDataSuccessAction | GetUserDataErrorAction;
+interface ClearUserDataAction {
+  type: typeof ACTION_TYPES.CLEAR_USER_DATA;
+}
+
+type UserActions = RegisterUserRequestAction | RegisterUserSuccessAction | RegisterUserErrorAction | LoginUserRequestAction | LoginUserSuccessAction | LoginUserErrorAction | GetUserDataRequestAction | GetUserDataSuccessAction | GetUserDataErrorAction | ClearUserDataAction;
 
 const initialState = {
   user: null,
@@ -78,6 +82,11 @@ const userReducer = (state = initialState, action: UserActions) => {
         ...state,
         isFetching: false,
         error: action.error,
+      };
+    case ACTION_TYPES.CLEAR_USER_DATA:
+      return {
+        ...state,
+        user: null,
       };
     default:
       return state;

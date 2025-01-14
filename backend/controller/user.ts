@@ -1,7 +1,7 @@
 const { validationResult } = require("express-validator");
 const { Op } = require("sequelize");
-const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const { generateTokens } = require("../services/generateTokens");
 const ApiError = require("../exceptions/apiError");
 const { User } = require("../models");
 
@@ -39,12 +39,11 @@ module.exports.registerUser = async (req, res, next) => {
       throw ApiError.jwtSecretsNotDefined();
     }
 
-    const accessToken = jwt.sign({ id: createdUser.id }, process.env.JWT_SECRET_ACCESS_TOKEN, { expiresIn: "1h" });
-    const refreshToken = jwt.sign({ id: createdUser.id }, process.env.JWT_SECRET_REFRESH_TOKEN, { expiresIn: "30d" });
+    const tokens = generateTokens(createdUser.id);
 
-    res.cookie("refreshToken", refreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true }); // 30 days
+    res.cookie("refreshToken", tokens.refreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true }); // 30 days
 
-    return res.status(201).send({ data: { accessToken, refreshToken } });
+    return res.status(201).send({ data: tokens });
   } catch (err) {
     next(err);
   }
@@ -80,12 +79,11 @@ module.exports.loginUser = async (req, res, next) => {
       throw ApiError.jwtSecretsNotDefined();
     }
 
-    const accessToken = jwt.sign({ id: user.id }, process.env.JWT_SECRET_ACCESS_TOKEN, { expiresIn: "1h" });
-    const refreshToken = jwt.sign({ id: user.id }, process.env.JWT_SECRET_REFRESH_TOKEN, { expiresIn: "30d" });
+    const tokens = generateTokens(user.id);
 
-    res.cookie("refreshToken", refreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true }); // 30 days
+    res.cookie("refreshToken", tokens.refreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true }); // 30 days
 
-    return res.status(200).send({ data: { accessToken, refreshToken } });
+    return res.status(200).send({ data: tokens });
   } catch (err) {
     next(err);
   }

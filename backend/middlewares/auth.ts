@@ -1,4 +1,4 @@
-const { verifyToken } = require("../service/verifyToken");
+const { verifyToken } = require("../services/verifyToken");
 const ApiError = require("../exceptions/apiError");
 
 module.exports = (req, res, next) => {
