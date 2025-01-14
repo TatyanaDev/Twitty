@@ -48,15 +48,15 @@ api.interceptors.response.use(
         originalRequest.headers["Authorization"] = `Bearer ${data.data.accessToken}`;
 
         return api.request(originalRequest);
-      } catch (err) {
-        console.error("Failed to refresh token:", err);
+      } catch (error) {
+        console.error("Failed to refresh token:", error);
 
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
 
         window.location.href = "/";
 
-        return Promise.reject(err);
+        return Promise.reject(error);
       }
     }
 

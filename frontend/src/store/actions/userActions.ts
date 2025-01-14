@@ -1,6 +1,7 @@
 import { ThunkDispatch } from "redux-thunk";
 import { AnyAction, Dispatch } from "redux";
 import { UserRegistrationFormValues, UserLoginFormValues } from "../../interfaces/User";
+import { handleAxiosError } from "../../utils/handleAxiosError";
 import UserService from "../../services/user.service";
 import AuthService from "../../services/auth.service";
 import { RootState } from "../../interfaces/state";
@@ -14,9 +15,7 @@ export const getUser = () => async (dispatch: Dispatch) => {
 
     dispatch({ type: ACTION_TYPES.GET_USER_DATA_SUCCESS, payload: data.data });
   } catch (error) {
-    dispatch({ type: ACTION_TYPES.GET_USER_DATA_ERROR, error });
-
-    throw error;
+    handleAxiosError(error, dispatch, ACTION_TYPES.GET_USER_DATA_ERROR);
   }
 };
 
@@ -33,12 +32,8 @@ export const registerUser = (user: UserRegistrationFormValues) => async (dispatc
     dispatch({ type: ACTION_TYPES.REGISTER_USER_SUCCESS });
 
     await dispatch(getUser());
-  } catch (err: any) {
-    const error = err.response?.data?.error?.message || "An unknown error occurred";
-
-    dispatch({ type: ACTION_TYPES.REGISTER_USER_ERROR, error });
-
-    throw err;
+  } catch (error) {
+    handleAxiosError(error, dispatch, ACTION_TYPES.REGISTER_USER_ERROR);
   }
 };
 
@@ -56,12 +51,8 @@ export const loginUser = (user: UserLoginFormValues) => async (dispatch: ThunkDi
     dispatch({ type: ACTION_TYPES.LOGIN_USER_SUCCESS });
 
     await dispatch(getUser());
-  } catch (err: any) {
-    const error = err.response?.data?.error?.message || "An unknown error occurred";
-
-    dispatch({ type: ACTION_TYPES.LOGIN_USER_ERROR, error });
-
-    throw error;
+  } catch (error) {
+    handleAxiosError(error, dispatch, ACTION_TYPES.LOGIN_USER_ERROR);
   }
 };
 
@@ -76,10 +67,7 @@ export const logoutUser = () => async (dispatch: Dispatch) => {
 
     dispatch({ type: ACTION_TYPES.LOGOUT_USER_DATA_SUCCESS });
     dispatch({ type: ACTION_TYPES.CLEAR_USER_DATA });
-  } catch (err) {
-    dispatch({ type: ACTION_TYPES.LOGOUT_USER_DATA_ERROR, payload: err });
-
-    throw err;
+  } catch (error) {
+    handleAxiosError(error, dispatch, ACTION_TYPES.LOGOUT_USER_DATA_ERROR);
   }
 };
-

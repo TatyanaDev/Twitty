@@ -28,8 +28,10 @@ export default function UserLoginForm() {
       formikBag.resetForm();
 
       history.push("/");
-    } catch (err: unknown) {
-      setFormError(typeof err === "string" ? err : "Login failed");
+    } catch (error) {
+      if (typeof error === "string") {
+        setFormError(error);
+      }
     }
   };
   return (

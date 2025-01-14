@@ -20,8 +20,8 @@ export default function Users() {
       await dispatch(logoutUser());
 
       history.push("/");
-    } catch (err) {
-      console.error("Error during logout:", err);
+    } catch (error) {
+      console.error("Error during logout:", error);
     }
   };
 

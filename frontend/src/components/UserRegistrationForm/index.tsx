@@ -32,8 +32,10 @@ export default function UserRegistrationForm() {
       formikHelpers.resetForm();
 
       history.push("/");
-    } catch (err: unknown) {
-      setFormError(typeof err === "string" ? err : "Registration failed");
+    } catch (error) {
+      if (typeof error === "string") {
+        setFormError(error);
+      }
     }
   };
 
@@ -109,7 +111,7 @@ export default function UserRegistrationForm() {
               )}
             </div>
 
-            <div className={style['mb-44']}>
+            <div className={style["mb-44"]}>
               <label htmlFor="passwordConfirmation" className="d-block">
                 Password confirmation
               </label>
