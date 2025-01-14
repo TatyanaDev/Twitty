@@ -33,9 +33,9 @@ export default function App() {
       <Route exact path="/login" component={Login} />
       <Route exact path="/messages" component={Messages} />
       <Route exact path="/settings" component={Settings} />
-      <Route exact path="/profile" component={Profile} />
+      <Route exact path="/users" component={Users} />
       <Route exact path="/posts/:id" component={Comments} />
-      <Route exact path="/:userName" component={Users} />
+      <Route exact path="/:userName" component={Profile} />
     </Switch>
   );
 }

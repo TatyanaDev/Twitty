@@ -24,12 +24,12 @@ export default function NavigationMenu() {
                 </Link>
               </li>
               <li>
-                <Link to={`/${user.userName}`} className={style["navigation-link"]}>
+                <Link to="/users" className={style["navigation-link"]}>
                   Users
                 </Link>
               </li>
               <li>
-                <Link to="/profile" className={style["navigation-link"]}>
+                <Link to={`/${user.userName}`} className={style["navigation-link"]}>
                   Profile
                 </Link>
               </li>
