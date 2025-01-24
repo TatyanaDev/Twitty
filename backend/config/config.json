@@ -7,6 +7,18 @@
     "dialect": "postgres",
     "migrationStorage": "json"
   },
-  "test": {},
-  "production": {}
+  "production": {
+    "username": "postgres",
+    "password": "q",
+    "database": "twitty",
+    "host": "127.0.0.1",
+    "dialect": "postgres",
+    "ssl": true,
+    "dialectOptions": {
+      "ssl": {
+        "require": true,
+        "rejectUnauthorized": false
+      }
+    }
+  }
 }
