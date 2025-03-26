@@ -76,7 +76,7 @@ export default function UserRegistrationForm() {
               <label htmlFor="userName" className="d-block">
                 User name
               </label>
-              <Field name="userName" id="userName" aria-label="User name" aria-invalid={touched.userName && !!errors.userName} aria-describedby="userNameError" />
+              <Field name="userName" id="userName" aria-label="User name" aria-invalid={touched.userName && !!errors.userName} aria-describedby="userNameError" autoComplete="username" />
 
               {errors.userName && touched.userName && (
                 <p id="userNameError" className="error">
@@ -102,7 +102,7 @@ export default function UserRegistrationForm() {
               <label htmlFor="password" className="d-block">
                 Password
               </label>
-              <Field name="password" id="password" aria-label="Password" aria-invalid={touched.password && !!errors.password} aria-describedby="passwordError" />
+              <Field name="password" id="password" type="password" aria-label="Password" aria-invalid={touched.password && !!errors.password} aria-describedby="passwordError" autoComplete="new-password" />
 
               {errors.password && touched.password && (
                 <p id="passwordError" className="error">
@@ -115,7 +115,7 @@ export default function UserRegistrationForm() {
               <label htmlFor="passwordConfirmation" className="d-block">
                 Password confirmation
               </label>
-              <Field name="passwordConfirmation" id="passwordConfirmation" aria-label="Password confirmation" aria-invalid={touched.passwordConfirmation && !!errors.passwordConfirmation} aria-describedby="passwordConfirmationError" />
+              <Field name="passwordConfirmation" id="passwordConfirmation" type="password" aria-label="Password confirmation" aria-invalid={touched.passwordConfirmation && !!errors.passwordConfirmation} aria-describedby="passwordConfirmationError" autoComplete="new-password" />
 
               {errors.passwordConfirmation && touched.passwordConfirmation && (
                 <p id="passwordConfirmationError" className="error">

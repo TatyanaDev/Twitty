@@ -45,7 +45,7 @@ export default function UserLoginForm() {
               <label htmlFor="login" className="d-block">
                 User name (email)
               </label>
-              <Field name="login" id="login" aria-label="Login" aria-invalid={touched.login && !!errors.login} aria-describedby="loginError" />
+              <Field name="login" id="login" aria-label="Login" aria-invalid={touched.login && !!errors.login} aria-describedby="loginError" autoComplete="username" />
 
               {errors.login && touched.login && (
                 <p id="loginError" className="error">
@@ -58,7 +58,7 @@ export default function UserLoginForm() {
               <label htmlFor="password" className="d-block">
                 Password
               </label>
-              <Field name="password" id="password" aria-label="Password" aria-invalid={touched.password && !!errors.password} aria-describedby="passwordError" />
+              <Field name="password" id="password" type="password" aria-label="Password" aria-invalid={touched.password && !!errors.password} aria-describedby="passwordError" autoComplete="current-password" />
 
               {errors.password && touched.password && (
                 <p id="passwordError" className="error">
