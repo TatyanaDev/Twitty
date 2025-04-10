@@ -9,6 +9,8 @@ import style from "./styles.module.css";
 export default function HomeGuest() {
   const { posts } = useSelector(postsSelector);
 
+  const postsWithUser = posts.filter((post) => post.user);
+
   return (
     <>
       <Layout>
@@ -16,8 +18,8 @@ export default function HomeGuest() {
           <h3 className="main-header">Explore</h3>
 
           <ul>
-            {posts.length ? (
-              posts.map((post: IPostData) => (
+            {postsWithUser.length ? (
+              postsWithUser.map((post: IPostData) => (
                 <li key={post.id} className="item">
                   <h4 className="mb-9 font-12 fw-700">
                     {post.user.firstName}&nbsp;{post.user.lastName}&nbsp;
@@ -44,7 +46,7 @@ export default function HomeGuest() {
           </div>
 
           <nav>
-            <ul className={style['d-flex']}>
+            <ul className={style["d-flex"]}>
               <li>
                 <Link to="/login" className={style["sign-in-link"]}>
                   Sign in

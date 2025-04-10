@@ -28,7 +28,7 @@ export default function Profile() {
     }
   };
 
-  const userPosts = posts.filter(({ userId }) => userId === user?.id);
+  const userPosts = user ? posts.filter(({ userId }) => userId === user.id) : [];
 
   return (
     <>
