@@ -33,30 +33,36 @@ api.interceptors.response.use(
   async (error: AxiosError) => {
     const originalRequest: CustomAxiosRequestConfig = error.config;
 
-    if (error.response?.status === 401 && !originalRequest._isRetry) {
-      originalRequest._isRetry = true;
-
-      try {
-        const { data } = await AuthService.refresh();
-
-        localStorage.setItem("accessToken", data.data.accessToken);
-
-        if (!originalRequest.headers) {
-          originalRequest.headers = {};
-        }
-
-        originalRequest.headers["Authorization"] = `Bearer ${data.data.accessToken}`;
-
-        return api.request(originalRequest);
-      } catch (error) {
-        console.error("Failed to refresh token:", error);
-
-        localStorage.removeItem("accessToken");
-        localStorage.removeItem("refreshToken");
-
-        window.location.href = "/";
-
+    if (error.response && error.response.status === 401) {
+      if (error.response.data.error && error.response.data.error.message === "Invalid password") {
         return Promise.reject(error);
+      }
+
+      if (!originalRequest._isRetry) {
+        originalRequest._isRetry = true;
+
+        try {
+          const { data } = await AuthService.refresh();
+
+          localStorage.setItem("accessToken", data.data.accessToken);
+
+          if (!originalRequest.headers) {
+            originalRequest.headers = {};
+          }
+
+          originalRequest.headers["Authorization"] = `Bearer ${data.data.accessToken}`;
+
+          return api.request(originalRequest);
+        } catch (error) {
+          console.error("Failed to refresh token:", error);
+
+          localStorage.removeItem("accessToken");
+          localStorage.removeItem("refreshToken");
+
+          window.location.href = "/";
+
+          return Promise.reject(error);
+        }
       }
     }
 
