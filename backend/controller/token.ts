@@ -3,6 +3,8 @@ const { generateTokens } = require("../services/generateTokens");
 const { verifyToken } = require("../services/verifyToken");
 const ApiError = require("../exceptions/apiError");
 
+const isProduction = process.env.NODE_ENV === "production";
+
 module.exports.refreshToken = async (req, res, next) => {
   try {
     const { refreshToken } = req.cookies;
@@ -23,9 +25,14 @@ module.exports.refreshToken = async (req, res, next) => {
 
     const tokens = generateTokens(userData.id);
 
-    res.cookie("refreshToken", tokens.refreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true }); // 30 days
+    res.cookie("refreshToken", tokens.refreshToken, {
+      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+      httpOnly: true,
+      secure: isProduction,
+      sameSite: isProduction ? "None" : "Lax",
+    });
 
-    return res.status(200).send({ data: tokens });
+    return res.status(200).send({ data: { accessToken: tokens.accessToken } });
   } catch (err) {
     next(err);
   }
@@ -41,8 +48,8 @@ module.exports.logoutToken = async (req, res, next) => {
 
     res.clearCookie("refreshToken", {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "Strict",
+      secure: isProduction,
+      sameSite: isProduction ? "None" : "Lax",
     });
 
     return res.status(200).send({ data: { message: "Successfully logged out" } });

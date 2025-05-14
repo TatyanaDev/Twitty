@@ -1,6 +1,5 @@
 interface IAuthData {
   accessToken: string;
-  refreshToken: string;
 }
 
 export interface AuthResponse {

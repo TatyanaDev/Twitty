@@ -24,10 +24,9 @@ export const registerUser = (user: UserRegistrationFormValues) => async (dispatc
 
   try {
     const { data } = await UserService.registerUser(user);
-    const { accessToken, refreshToken } = data.data;
+    const { accessToken } = data.data;
 
     localStorage.setItem("accessToken", accessToken);
-    localStorage.setItem("refreshToken", refreshToken);
 
     dispatch({ type: ACTION_TYPES.REGISTER_USER_SUCCESS });
 
@@ -43,10 +42,9 @@ export const loginUser = (user: UserLoginFormValues) => async (dispatch: ThunkDi
   try {
     const { data } = await UserService.loginUser(user);
 
-    const { accessToken, refreshToken } = data.data;
+    const { accessToken } = data.data;
 
     localStorage.setItem("accessToken", accessToken);
-    localStorage.setItem("refreshToken", refreshToken);
 
     dispatch({ type: ACTION_TYPES.LOGIN_USER_SUCCESS });
 
@@ -63,7 +61,6 @@ export const logoutUser = () => async (dispatch: Dispatch) => {
     await AuthService.logout();
 
     localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
 
     dispatch({ type: ACTION_TYPES.LOGOUT_USER_DATA_SUCCESS });
     dispatch({ type: ACTION_TYPES.CLEAR_USER_DATA });

@@ -5,6 +5,8 @@ const { generateTokens } = require("../services/generateTokens");
 const ApiError = require("../exceptions/apiError");
 const { User } = require("../models");
 
+const isProduction = process.env.NODE_ENV === "production";
+
 module.exports.registerUser = async (req, res, next) => {
   try {
     const errors = validationResult(req);
@@ -41,9 +43,14 @@ module.exports.registerUser = async (req, res, next) => {
 
     const tokens = generateTokens(createdUser.id);
 
-    res.cookie("refreshToken", tokens.refreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true }); // 30 days
+    res.cookie("refreshToken", tokens.refreshToken, {
+      maxAge: 30 * 24 * 60 * 60 * 1000,
+      httpOnly: true,
+      secure: isProduction,
+      sameSite: isProduction ? "None" : "Lax",
+    });
 
-    return res.status(201).send({ data: tokens });
+    return res.status(201).send({ data: { accessToken: tokens.accessToken } });
   } catch (err) {
     next(err);
   }
@@ -81,9 +88,14 @@ module.exports.loginUser = async (req, res, next) => {
 
     const tokens = generateTokens(user.id);
 
-    res.cookie("refreshToken", tokens.refreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true }); // 30 days
+    res.cookie("refreshToken", tokens.refreshToken, {
+      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+      httpOnly: true,
+      secure: isProduction,
+      sameSite: isProduction ? "None" : "Lax",
+    });
 
-    return res.status(200).send({ data: tokens });
+    return res.status(200).send({ data: { accessToken: tokens.accessToken } });
   } catch (err) {
     next(err);
   }
