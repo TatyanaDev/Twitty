@@ -30,6 +30,7 @@ module.exports.refreshToken = async (req, res, next) => {
       httpOnly: true,
       secure: isProduction,
       sameSite: isProduction ? "None" : "Lax",
+      partitioned: true,
     });
 
     return res.status(200).send({ data: { accessToken: tokens.accessToken } });
@@ -50,6 +51,7 @@ module.exports.logoutToken = async (req, res, next) => {
       httpOnly: true,
       secure: isProduction,
       sameSite: isProduction ? "None" : "Lax",
+      partitioned: true,
     });
 
     return res.status(200).send({ data: { message: "Successfully logged out" } });

@@ -48,6 +48,7 @@ module.exports.registerUser = async (req, res, next) => {
       httpOnly: true,
       secure: isProduction,
       sameSite: isProduction ? "None" : "Lax",
+      partitioned: true,
     });
 
     return res.status(201).send({ data: { accessToken: tokens.accessToken } });
@@ -93,6 +94,7 @@ module.exports.loginUser = async (req, res, next) => {
       httpOnly: true,
       secure: isProduction,
       sameSite: isProduction ? "None" : "Lax",
+      partitioned: true,
     });
 
     return res.status(200).send({ data: { accessToken: tokens.accessToken } });
