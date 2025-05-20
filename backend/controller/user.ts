@@ -12,7 +12,7 @@ module.exports.registerUser = async (req, res, next) => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      return next(ApiError.BadRequest("Validation error", errors.array()));
+      return next(ApiError.badRequest("Validation error", errors.array()));
     }
 
     const { userName, email, password } = req.body;
@@ -62,7 +62,7 @@ module.exports.loginUser = async (req, res, next) => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      return next(ApiError.BadRequest("Validation error", errors.array()));
+      return next(ApiError.badRequest("Validation error", errors.array()));
     }
 
     const { login, password } = req.body;

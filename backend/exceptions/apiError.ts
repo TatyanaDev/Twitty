@@ -12,11 +12,11 @@ module.exports = class ApiError extends Error {
     return new ApiError(400, "The specified email is already registered");
   }
 
-  static BadRequest(message: string, errors: string[] = []): ApiError {
+  static badRequest(message: string, errors: string[] = []): ApiError {
     return new ApiError(400, message, errors);
   }
 
-  static UnauthorizedError(message: string | undefined): ApiError {
+  static unauthorizedError(message: string | undefined): ApiError {
     return new ApiError(401, message || "Unauthorized");
   }
 

@@ -6,25 +6,25 @@ module.exports = (req, res, next) => {
     const { authorization } = req.headers;
 
     if (!authorization || !authorization.startsWith("Bearer ")) {
-      return next(ApiError.UnauthorizedError());
+      return next(ApiError.unauthorizedError());
     }
 
     const token = authorization.split(" ")[1];
 
     if (!token) {
-      return next(ApiError.UnauthorizedError());
+      return next(ApiError.unauthorizedError());
     }
 
     const userData = verifyToken(token);
 
     if (!userData) {
-      return next(ApiError.UnauthorizedError());
+      return next(ApiError.unauthorizedError());
     }
 
     req.userData = userData;
 
     next();
   } catch (err) {
-    return next(ApiError.UnauthorizedError());
+    return next(ApiError.unauthorizedError());
   }
 };

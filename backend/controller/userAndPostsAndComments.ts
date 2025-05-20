@@ -31,7 +31,7 @@ module.exports.createCommentForPost = async (req, res, next) => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      return next(ApiError.BadRequest("Validation error", errors.array()));
+      return next(ApiError.badRequest("Validation error", errors.array()));
     }
 
     const { userId, postId } = req.params;

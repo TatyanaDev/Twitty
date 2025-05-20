@@ -7,7 +7,7 @@ module.exports.createPostForUser = async (req, res, next) => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      return next(ApiError.BadRequest("Validation error", errors.array()));
+      return next(ApiError.badRequest("Validation error", errors.array()));
     }
 
     const { userId } = req.params;
@@ -30,7 +30,7 @@ module.exports.updateUserPost = async (req, res, next) => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      return next(ApiError.BadRequest("Validation error", errors.array()));
+      return next(ApiError.badRequest("Validation error", errors.array()));
     }
 
     const { postId } = req.params;

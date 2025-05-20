@@ -10,13 +10,13 @@ module.exports.refreshToken = async (req, res, next) => {
     const { refreshToken } = req.cookies;
 
     if (!refreshToken) {
-      throw ApiError.UnauthorizedError();
+      throw ApiError.unauthorizedError();
     }
 
     const userData = await verifyToken(refreshToken, false);
 
     if (!userData) {
-      throw ApiError.UnauthorizedError();
+      throw ApiError.unauthorizedError();
     }
 
     if (!process.env.JWT_SECRET_ACCESS_TOKEN || !process.env.JWT_SECRET_REFRESH_TOKEN) {
@@ -44,7 +44,7 @@ module.exports.logoutToken = async (req, res, next) => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      return next(ApiError.BadRequest("Validation error", errors.array()));
+      return next(ApiError.badRequest("Validation error", errors.array()));
     }
 
     res.clearCookie("refreshToken", {
